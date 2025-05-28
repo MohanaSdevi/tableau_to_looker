@@ -9,7 +9,7 @@
     - name: "Iconic Launch: Mountain"
       title: "Iconic Launch: Mountain"
       type: single_value
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.iconic_launch__great_lakes__copy__1371064672908218372]
       show_value_labels: true
@@ -20,7 +20,7 @@
     - name: "IconicLaunchCoastalPlains"
       title: "Iconic Launch: Coastal Plains"
       type: single_value
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.iconic_launch__atlantic_south__copy__1371064672907948034]
       show_value_labels: true
@@ -31,7 +31,7 @@
     - name: "IconicLaunchPacific"
       title: "Iconic Launch: Pacific"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_iconic_launch__mountain__copy__1371064672908279813_nk]
       show_value_labels: true
@@ -42,7 +42,7 @@
     - name: "Iconic Launch: Great Lakes"
       title: "Iconic Launch: Great Lakes"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_iconic_launch__coastal_plains__copy__1371064672908079107_nk]
       show_value_labels: true
@@ -53,7 +53,7 @@
     - name: "TXTReportRefresh"
       title: "TXT Report Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.txt_data_refresh__copy__1738952406629519362]
       show_value_labels: true
@@ -64,7 +64,7 @@
     - name: "IconicLaunchAtlanticNorth"
       title: "Iconic Launch: Atlantic North"
       type: single_value
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.calculation_1371064672907669504]
       show_value_labels: true
@@ -75,7 +75,7 @@
     - name: "IconicLaunchAtlanticSouth"
       title: "Iconic Launch: Atlantic South"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.iconic_launch__atlantic_north__copy__1371064672907792385]
       show_value_labels: true
@@ -86,7 +86,7 @@
     - name: "TXTDataRefresh"
       title: "TXT Data Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1738952406623186945_nk]
       show_value_labels: true

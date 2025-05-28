@@ -1,9 +1,9 @@
 connection: "tableau_looker_pilot"
 
-include: "/views/intraday_sales_results_day7_mock.view.lkml"
-include: "/views/intraday_sales_results_hqa_pd_qmtbls_mock.view.lkml"
+include:"/views/intradaysales_results_day_7_mock.view.lkml"
+include: "/views/intradaysales_results_hqa_pd_qmtbls_mock.view.lkml"
 include: "/lookml_dashboards/*.dashboard"
 
 
-explore: intraday_sales_results_day7_mock {}
-explore: intraday_sales_results_hqa_pd_qmtbls_mock {}
+explore: intradaysales_results_day_7_mock  {}
+explore: intradaysales_results_hqa_pd_qmtbls_mock {}

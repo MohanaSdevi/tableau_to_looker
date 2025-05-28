@@ -10,7 +10,7 @@
     - name: none_calculation_1181350527289110528_nk
       title: "Model Name"
       type: field_filter
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       field: intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1181350527289110528_nk
       allow_multiple_values: true
@@ -19,7 +19,7 @@
     - name: none_segment_nk
       title: "Segment"
       type: field_filter
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       field: intradaysales_results_hqa_pd_qmtbls_mock.none_segment_nk
       allow_multiple_values: true
@@ -30,7 +30,7 @@
       title: "Google"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.usr_calculation_687924861912420364_qk]
@@ -46,7 +46,7 @@
     - name: "googlechan"
       title: "Google"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
@@ -63,7 +63,7 @@
       title: "Other"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.usr_calculation_687924861912420364_qk]
@@ -80,7 +80,7 @@
       title: "Apple"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
@@ -96,7 +96,7 @@
     - name: "phone_heat"
       title: "Top 5 Phone Models"
       type: looker_grid
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_model_nm_nk, intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok, intradaysales_results_hqa_pd_qmtbls_mock.thr_rpt_time_ok, intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.thr_rpt_time_ok]
@@ -112,7 +112,7 @@
     - name: "Notice"
       title: "Notice"
       type: single_value
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1343198651864219649_nk]
       show_value_labels: true
@@ -123,7 +123,7 @@
     - name: "TXTDataRefresh"
       title: "TXT Data Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1738952406623186945_nk]
       show_value_labels: true
@@ -134,7 +134,7 @@
     - name: "Other_pre_"
       title: "Other"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk, intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1181350527289110528_nk, intradaysales_results_hqa_pd_qmtbls_mock.none_segment_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
@@ -151,7 +151,7 @@
       title: "Other"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
@@ -167,7 +167,7 @@
     - name: Applemarket
       title: Apple
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_mkt_nk]
@@ -183,7 +183,7 @@
     - name: "Samsungpre"
       title: "Samsung"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
@@ -199,7 +199,7 @@
     - name: "TXTReportRefresh"
       title: "TXT Report Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_txt_data_refresh__copy__1738952406629519362_nk]
       show_value_labels: true
@@ -211,7 +211,7 @@
       title: "Apple"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk, intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
@@ -227,7 +227,7 @@
     - name: "Googlepre"
       title: "Google"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
@@ -243,7 +243,7 @@
     - name: "Samsungchan"
       title: "Samsung"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk, intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1181350527289110528_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
@@ -260,7 +260,7 @@
       title: "Google"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_mkt_nk]
@@ -276,7 +276,7 @@
     - name: "othermarket"
       title: "Other"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_mkt_nk]
@@ -292,7 +292,7 @@
     - name: "Samsungmarket"
       title: "Samsung"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_mkt_nk]
@@ -309,7 +309,7 @@
       title: "Samsung"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
@@ -325,7 +325,7 @@
     - name: "Applepre"
       title: "Apple"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
@@ -341,7 +341,7 @@
     - name: "phonesdetail"
       title: "phones detail"
       type: single_value
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       show_value_labels: true
@@ -356,7 +356,7 @@
       title: "By Interval"
       type: looker_column
       stacking: normal
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok, intradaysales_results_hqa_pd_qmtbls_mock.thr_rpt_time_ok]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.attr_channel_nk, intradaysales_results_hqa_pd_qmtbls_mock.attr_calculation_5910989867950081_nk, intradaysales_results_hqa_pd_qmtbls_mock.attr_dttm_ok, intradaysales_results_hqa_pd_qmtbls_mock.attr_is_preorder_nk, intradaysales_results_hqa_pd_qmtbls_mock.attr_manf_nk, intradaysales_results_hqa_pd_qmtbls_mock.attr_eqp_class_desc_nk, intradaysales_results_hqa_pd_qmtbls_mock.attr_mkt_nk]

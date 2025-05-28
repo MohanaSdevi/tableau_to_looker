@@ -10,7 +10,7 @@
     - name: none_segment_nk
       title: "Segment"
       type: field_filter
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       field: intradaysales_results_hqa_pd_qmtbls_mock.none_segment_nk
       allow_multiple_values: true
@@ -19,7 +19,7 @@
     - name: none_calculation_1181350527289110528_nk
       title: "Model Name"
       type: field_filter
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       field: intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1181350527289110528_nk
       allow_multiple_values: true
@@ -29,7 +29,7 @@
     - name: "bytypeD"
       title: "By Sales Type"
       type: looker_donut_multiples
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
@@ -45,7 +45,7 @@
     - name: "TXTReportRefresh"
       title: "TXT Report Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_txt_data_refresh__copy__1738952406629519362_nk]
       show_value_labels: true
@@ -56,7 +56,7 @@
     - name: "byTypeS(2)"
       title: "By Hour"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok, intradaysales_results_hqa_pd_qmtbls_mock.thr_rpt_time_ok]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok]
@@ -71,9 +71,9 @@
       title: "By Preorder/Backorder"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
-      fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.pcto_sum_sales_qk]
+      fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk]
       show_value_labels: true
       hide_legend: true
@@ -88,7 +88,7 @@
       title: "By VCG Market"
       type: looker_bar
       stacking: normal
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_mkt_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_mkt_nk]
@@ -104,7 +104,7 @@
     - name: "phnwd"
       title: "Phone Sales vs All Other Wireless Devices"
       type: looker_bar
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk, intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1343198652318875651_nk]
@@ -120,7 +120,7 @@
       title: "By Equipment Type"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_eqp_type_nk, intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_eqp_type_nk]
@@ -136,7 +136,7 @@
     - name: "Notice"
       title: "Notice"
       type: single_value
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1343198651864219649_nk]
       show_value_labels: true
@@ -148,7 +148,7 @@
       title: "By Phone Manufacturer"
       type: looker_donut_multiples
       stacking: percent
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_manf_nk, intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_dttm_ok, intradaysales_results_hqa_pd_qmtbls_mock.none_is_preorder_nk, intradaysales_results_hqa_pd_qmtbls_mock.none_eqp_class_desc_nk, intradaysales_results_hqa_pd_qmtbls_mock.none_mkt_nk, intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk, intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_5910989867950081_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_manf_nk]
@@ -165,7 +165,7 @@
       title: "By VCG Channel"
       type: looker_bar
       stacking: normal
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_sales_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
@@ -180,7 +180,7 @@
     - name: "TXTDataRefresh"
       title: "TXT Data Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1738952406623186945_nk]
       show_value_labels: true

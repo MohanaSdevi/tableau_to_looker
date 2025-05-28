@@ -10,7 +10,7 @@
     - name: none_eqp_grp_desc_nk
       title: "Eqp Grp Desc"
       type: field_filter
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       field: intradaysales_results_hqa_pd_qmtbls_mock.none_eqp_grp_desc_nk
       allow_multiple_values: true
@@ -19,7 +19,7 @@
     - name: none_calculation_1742611641682452480_nk
       title: "Sale Type"
       type: field_filter
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       field: intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1742611641682452480_nk
       allow_multiple_values: true
@@ -29,7 +29,7 @@
     - name: "TXTDataRefresh"
       title: "TXT Data Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1738952406623186945_nk]
       show_value_labels: true
@@ -40,7 +40,7 @@
     - name: "TXTReportRefresh"
       title: "TXT Report Refresh"
       type: looker_column
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
       fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_txt_data_refresh__copy__1738952406629519362_nk]
       show_value_labels: true
@@ -52,10 +52,10 @@
       title: "day1_mkt_graph "
       type: looker_line
       stacking: ''
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
-      fields: [intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_qk, intradaysales_results_hqa_pd_qmtbls_mock.sum_orders_qk]
-      pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_market_nk]
+      fields: [intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_qk]
+
       sorts: []
       show_value_labels: false
       listen:
@@ -68,10 +68,10 @@
     - name: "day1_mkt_chart"
       title: "By VCG Market"
       type: looker_grid
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
-      fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_market_nk, intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok, intradaysales_results_hqa_pd_qmtbls_mock.sum_orders_qk]
-      pivots: [intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok]
+      fields: [intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok]
+
       show_value_labels: true
       listen:
         none_calculation_1742611641682452480_nk: intradaysales_results_hqa_pd_qmtbls_mock.none_calculation_1742611641682452480_nk
@@ -84,9 +84,9 @@
       title: "day1_chnl_graph"
       type: looker_line
       stacking: ''
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
-      fields: [intradaysales_results_hqa_pd_qmtbls_mock.sum_orders_qk, intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
+      fields: [ intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_qk, intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk]
       sorts: []
       show_value_labels: false
@@ -100,9 +100,9 @@
     - name: "day1_chn_chart"
       title: "By VCG Channel"
       type: looker_grid
-      model: intraday_sales_model
+      model: tableau_to_looker
       explore: intradaysales_results_hqa_pd_qmtbls_mock
-      fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk, intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok, intradaysales_results_hqa_pd_qmtbls_mock.sum_orders_qk]
+      fields: [intradaysales_results_hqa_pd_qmtbls_mock.none_channel_nk, intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok]
       pivots: [intradaysales_results_hqa_pd_qmtbls_mock.tdy_rpt_dt_ok]
       show_value_labels: true
       listen:
