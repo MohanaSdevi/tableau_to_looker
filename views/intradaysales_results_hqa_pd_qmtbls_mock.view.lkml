@@ -245,6 +245,12 @@ view: intradaysales_results_hqa_pd_qmtbls_mock {
          ELSE ${model_nm}
          END ;;
   }
+  measure: model_rank {
+    type: number
+    sql: RANK() OVER (ORDER BY ${model_name__copy__2681330689597788160} DESC) ;;
+    label: "Model Rank"
+    description: "Rank of Model by Sub-Category or other grouping"
+  }
   dimension: rolling_24__copy__1343198652312211458 {
     label: "iPhone 16 "
     type: yesno
