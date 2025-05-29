@@ -372,45 +372,70 @@ view: intradaysales_results_hqa_pd_qmtbls_mock {
     type: string
     sql: ${trans_type} ;;
   }
+  measure: sum_sales_percent {
+    type: number
+    sql: MAX(${sales}/${sum_sales_qk})*100 ;;
+  }
   measure: sum_sales_qk {
     label: "Sales"
     type: sum
     sql: ${sales} ;;
+    # html: Total Sales: {{rendered_value}} <br><br>
+    # <b>Filtered Values (* represents 'All')<br>
+    # Sale Type: {{attr_calculation_5910989867950081_nk._rendered_value}} <br>
+    # Equipment Type: {{attr_eqp_class_desc_nk._rendered_value}} <br>
+    # Manufacturer: {{attr_manf_nk._rendered_value}}<br>
+    # Preorder: {{attr_is_preorder_nk._rendered_value}} <br>
+    # Channel: {{attr_channel_nk._rendered_value}} <br>
+    # Market: {{attr_mkt_nk._rendered_value}};;
   }
-  dimension: attr_channel_nk {
+  measure: attr_channel_nk {
     label: "Channel"
     type: string
-    sql: ${channel} ;;
+    sql: CASE
+      WHEN COUNT(DISTINCT ${channel}) = 1 THEN MIN(${channel})
+      ELSE '*'  -- or a placeholder like "'Multiple Values'"
+    END ;;
   }
-  dimension: attr_calculation_5910989867950081_nk {
+  measure: attr_calculation_5910989867950081_nk {
     label: "Sale Type"
     type: string
-    sql: ${calculation_5910989867950081} ;;
+    sql: CASE
+      WHEN COUNT(DISTINCT ${calculation_5910989867950081}) = 1 THEN MIN(${calculation_5910989867950081})
+      ELSE '*'  -- or a placeholder like "'Multiple Values'"
+    END ;;
   }
-  dimension: attr_dttm_ok {
-    label: "Dttm"
-    type: date_time
-    sql: CAST(${dttm} AS TIMESTAMP) ;;
-  }
-  dimension: attr_is_preorder_nk {
+  measure: attr_is_preorder_nk {
     label: "Is Preorder"
     type: string
-    sql: ${is_preorder} ;;
+    sql: CASE
+    WHEN COUNT(DISTINCT ${is_preorder}) = 1 THEN MIN(${is_preorder})
+    ELSE '*'  -- or a placeholder like "'Multiple Values'"
+    END ;;
   }
-  dimension: attr_manf_nk {
+  measure: attr_manf_nk {
     label: "Manf"
     type: string
-    sql: ${manf} ;;
+    sql: CASE
+    WHEN COUNT(DISTINCT ${manf}) = 1 THEN MIN(${manf})
+    ELSE '*'  -- or a placeholder like "'Multiple Values'"
+    END ;;
   }
-  dimension: attr_eqp_class_desc_nk {
+  measure: attr_eqp_class_desc_nk {
     label: "Eqp Class Desc"
     type: string
-    sql: ${eqp_class_desc} ;;
+    sql: CASE
+    WHEN COUNT(DISTINCT ${eqp_class_desc}) = 1 THEN MIN(${eqp_class_desc})
+    ELSE '*'  -- or a placeholder like "'Multiple Values'"
+    END ;;
   }
-  dimension: attr_mkt_nk {
+  measure: attr_mkt_nk {
     label: "Mkt"
     type: string
-    sql: ${mkt} ;;
+    sql: CASE
+    WHEN COUNT(DISTINCT ${mkt}) = 1 THEN MIN(${mkt})
+    ELSE '*'  -- or a placeholder like "'Multiple Values'"
+    END ;;
   }
   dimension: none_calculation_1181350527289110528_nk {
     label: "Model Name"
@@ -557,5 +582,9 @@ view: intradaysales_results_hqa_pd_qmtbls_mock {
     label: "phone only sales"
     type: string
     sql: ${calculation_1343198652318875651} ;;
+  }
+  measure: sales_1 {
+    type: string
+    sql: ifnull(CAST(${sum_sales_qk} AS STRING),"") ;;
   }
 }
