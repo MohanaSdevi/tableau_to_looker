@@ -9,3 +9,5 @@ include: "/lookml_dashboards/*.dashboard"
 explore: intradaysales_results_day_7_mock  {}
 explore: intradaysales_results_hqa_pd_qmtbls_mock {}
 explore: output_for_google_random_1000 {}
+explore: cstatsdynamicscorecard_mock {}
+explore: channeloutlier {}
