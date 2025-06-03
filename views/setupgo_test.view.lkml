@@ -878,21 +878,56 @@ view: setupgo_test {
     # ELSE "Positive" END
     sql: CAST('string' AS STRING) ;;
   }
+  # *********************************************************Js
 
-  dimension: calculation_434315908847452170 {
-    label: "Date Selector"
+  # dimension: calculation_434315908847452170 {
+  #   label: "Date Selector"
+  #   type: date
+  #   # DATE(
+  #   # CASE [Parameters].[Agent Parameter]
+  #   # WHEN 'Day' THEN [PYMNT_DT]
+  #   # WHEN  'Week' THEN DATETRUNC('week',[PYMNT_DT],'sunday')
+  #   # WHEN 'Month' THEN DATETRUNC('month',[PYMNT_DT])
+  #   # When 'Quarter' Then DATETRUNC('quarter',[PYMNT_DT])
+  #   # When 'Year' Then DATETRUNC('year',[PYMNT_DT])
+  #   # END
+  #   # )
+  #   sql: CAST('1970-01-01 00:00:00' AS TIMESTAMP) ;;
+  # }
+
+  # dimension: calculation_434315908847452170 {
+  #     label: "Date Selector"
+  #     type: date
+  #       sql:
+  #           CASE
+  #             WHEN ${% parameter date_level_selector %} = 'Day' THEN ${pymnt_dt}
+  #             WHEN ${% parameter date_level_selector %} = 'Week' THEN DATE_TRUNC(${pymnt_dt}, WEEK(SUNDAY))
+  #             WHEN ${% parameter date_level_selector %} = 'Month' THEN DATE_TRUNC(${pymnt_dt}, MONTH)
+  #             WHEN ${% parameter date_level_selector %} = 'Quarter' THEN DATE_TRUNC(${pymnt_dt}, QUARTER)
+  #             WHEN ${% parameter date_level_selector %} = 'Year' THEN DATE_TRUNC(${pymnt_dt}, YEAR)
+  #             ELSE NULL
+  #           END ;;
+  #     }
+
+
+   dimension: calculation_434315908847452170 {
+    label: "Date Selector_1"
     type: date
-    # DATE(
-    # CASE [Parameters].[Agent Parameter]
-    # WHEN 'Day' THEN [PYMNT_DT]
-    # WHEN  'Week' THEN DATETRUNC('week',[PYMNT_DT],'sunday')
-    # WHEN 'Month' THEN DATETRUNC('month',[PYMNT_DT])
-    # When 'Quarter' Then DATETRUNC('quarter',[PYMNT_DT])
-    # When 'Year' Then DATETRUNC('year',[PYMNT_DT])
-    # END
-    # )
-    sql: CAST('1970-01-01 00:00:00' AS TIMESTAMP) ;;
+    sql:
+      CASE
+        WHEN {% parameter date_level_selector %} = 'Day' THEN ${tdy_pymnt_dt_qk}
+        WHEN {% parameter date_level_selector %} = 'Week' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, WEEK(SUNDAY))
+        WHEN {% parameter date_level_selector %} = 'Month' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, MONTH)
+        WHEN {% parameter date_level_selector %} = 'Quarter' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, QUARTER)
+        WHEN {% parameter date_level_selector %} = 'Year' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, YEAR)
+        ELSE ${tdy_pymnt_dt_qk}
+      END ;;
   }
+
+
+
+
+  # *********************************************************************
 
   dimension: calculation_452048844323356674 {
     label: "RIS (for views)"
@@ -1006,10 +1041,11 @@ view: setupgo_test {
   measure: calculation_978688514352406528 {
     label: "Take Rate %"
     type: number
-    sql: SUM(${suag_num__copy__452048844292403200})/SUM(${suag_den}) ;;
+   sql: SAFE_DIVIDE(SUM(${suag_num__copy__452048844292403200}),SUM(${suag_den})) ;;
     value_format: "0.0%"
     # SUM([SUAG_NUM (copy)_452048844292403200])/SUM([SUAG_DEN])
   }
+
   # *****************************************JN********************************************
 
   dimension: calculation_978688514360860676 {
@@ -1085,25 +1121,49 @@ view: setupgo_test {
   }
   # ***************************************************************************************
 
+  # dimension: date_selector__copy__434315908848119819 {
+  #   label: "Date Selector (copy)"
+  #   type: string
+  #   # Case [Parameters].[Agent Parameter]
+  #   #     WHEN 'Day' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
+  #   #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
+  #   #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
+  #   #     WHEN 'Week' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
+  #   #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
+  #   #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
+  #   #     WHEN 'Month' THEN LEFT(DATENAME('month',[Calculation_434315908847452170]),3)
+  #   #         + " " + DATENAME('year',[Calculation_434315908847452170])
+  #   #     WHEN 'Quarter' Then DATENAME('quarter',[Calculation_434315908847452170])
+  #   #         + "Q " + "' " + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
+  #   #
+  #   #     WHEN 'Year' THEN DATENAME('year',[Calculation_434315908847452170])
+  #   #
+  #   #     END
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+
   dimension: date_selector__copy__434315908848119819 {
-    label: "Date Selector (copy)"
+    label: "Date Selector (copy)1"
     type: string
-    # Case [Parameters].[Agent Parameter]
-    #     WHEN 'Day' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
-    #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
-    #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
-    #     WHEN 'Week' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
-    #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
-    #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
-    #     WHEN 'Month' THEN LEFT(DATENAME('month',[Calculation_434315908847452170]),3)
-    #         + " " + DATENAME('year',[Calculation_434315908847452170])
-    #     WHEN 'Quarter' Then DATENAME('quarter',[Calculation_434315908847452170])
-    #         + "Q " + "' " + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
-    #
-    #     WHEN 'Year' THEN DATENAME('year',[Calculation_434315908847452170])
-    #
-    #     END
-    sql: CAST('string' AS STRING) ;;
+    sql:
+    CASE
+        WHEN {% parameter date_level_selector %} = 'Day' THEN
+          FORMAT_DATE('%m/%d/%y', ${tdy_pymnt_dt_qk})
+        WHEN {% parameter date_level_selector %} = 'Week' THEN
+          FORMAT_DATE('%m/%d/%y', ${tdy_pymnt_dt_qk})
+        WHEN {% parameter date_level_selector %} = 'Month' THEN
+          FORMAT_DATE('%b %Y', ${tdy_pymnt_dt_qk})
+        WHEN {% parameter date_level_selector %} = 'Quarter' THEN
+          CONCAT(
+            'Q', CAST(EXTRACT(QUARTER FROM ${tdy_pymnt_dt_qk}) AS STRING),
+            " '",
+            SUBSTR(CAST(EXTRACT(YEAR FROM ${tdy_pymnt_dt_qk}) AS STRING), 3, 2)
+          )
+        WHEN {% parameter date_level_selector %} = 'Year' THEN
+          CAST(EXTRACT(YEAR FROM ${tdy_pymnt_dt_qk}) AS STRING)
+        ELSE FORMAT_DATE('%m/%d/%y', ${tdy_pymnt_dt_qk})
+      END ;;
   }
 
   # filter: date_level_selector {
@@ -1630,6 +1690,7 @@ view: setupgo_test {
     label: "Take Rate %"
     type: number
     sql: ${calculation_978688514352406528} ;;
+    value_format: "0.0%"
   }
   dimension: none_calculation_464996668061204481_qk {
     label: "Data Refreshed"
@@ -2004,6 +2065,44 @@ view: setupgo_test {
     type: sum
     sql: ${net_sales} ;;
   }
+
+  # parameter: date_level_selector {
+  #   type: string
+  #   default_value: "Day"
+  #   allowed_value: { value: "Day" }
+  #   allowed_value: { value: "Week" }
+  #   allowed_value: { value: "Month" }
+  #   allowed_value: { value: "Quater" }
+  #   allowed_value: { value: "Year" }
+  # }
+
+
+  parameter: date_level_selector {
+    type: string
+    allowed_value: {
+      label: "Day"
+      value: "Day"
+    }
+    allowed_value: {
+      label: "Week"
+      value: "Week"
+    }
+    allowed_value: {
+      label: "Month"
+      value: "Month"
+    }
+    allowed_value: {
+      label: "Quarter"
+      value: "Quarter"
+    }
+    allowed_value: {
+      label: "Year"
+      value: "Year"
+    }
+    default_value: "Day"
+  }
+
+
 
 
 }
