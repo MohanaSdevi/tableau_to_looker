@@ -14,3 +14,4 @@ explore: output_for_google_random_1000 {}
 explore: cstatsdynamicscorecard_mock {}
 explore: channeloutlier {}
 explore: setupgo_test {}
+explore: testdna {}

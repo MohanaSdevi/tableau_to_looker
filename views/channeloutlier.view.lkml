@@ -1,4 +1,4 @@
-view: channeloutlier {
+view:channeloutlier {
   sql_table_name: `elastic-pocs.Super_Store_Sales.ChannelOutlier` ;;
 
 
