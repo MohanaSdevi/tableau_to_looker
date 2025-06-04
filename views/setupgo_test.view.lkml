@@ -954,19 +954,33 @@ view: setupgo_test {
     # END
     sql: CAST(100.0 AS NUMERIC) ;;
   }
+# **********************************************************************
+  # dimension: calculation_452048844325732358 {
+  #   label: "Numerator Shown"
+  #   type: number
+  #   # Case [Parameters].[Parameter 10]
+  #   #
+  #   # when 'Overall' then sum([RIS_NUM])
+  #   # when 'SU&G' then [Calculation_990510463076048899]
+  #   # when 'Non SU&G' then [RIS Num SUAG (copy)_452048844324683781]
+  #   #
+  #   # END
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
 
-  dimension: calculation_452048844325732358 {
-    label: "Numerator Shown"
+  measure: calculation_452048844325732358 {
+   label: "Numerator Shown test"
     type: number
-    # Case [Parameters].[Parameter 10]
-    #
-    # when 'Overall' then sum([RIS_NUM])
-    # when 'SU&G' then [Calculation_990510463076048899]
-    # when 'Non SU&G' then [RIS Num SUAG (copy)_452048844324683781]
-    #
-    # END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql:
+    CASE {% parameter ris_type %}
+      WHEN 'Overall' THEN ${ris_num}
+      WHEN 'SU&G' THEN ${calculation_990510463076048899}
+      WHEN 'Non SU&G' THEN ${ris_num_suag__copy__452048844324683781}
+      ELSE NULL
+    END
+  ;;
   }
+  # **********************************************************************
 
   dimension: calculation_464996668061204481 {
     label: "Data Refreshed"
@@ -1290,18 +1304,33 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: numerator_shown__copy__452048844326088711 {
-    label: "Denominator Shown"
+  # dimension: numerator_shown__copy__452048844326088711 {
+  #   label: "Denominator Shown"
+  #   type: number
+  #   # Case [Parameters].[Parameter 10]
+  #   #
+  #   # when 'Overall' then sum([RIS_DEN])
+  #   # when 'SU&G' then [RIS Num SUAG (copy)_990510463076642820]
+  #   # when 'Non SU&G' then [RIS Denom SUAG (copy)_452048844324671492]
+  #   #
+  #   # END
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
+
+  measure: numerator_shown__copy__452048844326088711 {
+    label: "Denominator Shown test"
     type: number
-    # Case [Parameters].[Parameter 10]
-    #
-    # when 'Overall' then sum([RIS_DEN])
-    # when 'SU&G' then [RIS Num SUAG (copy)_990510463076642820]
-    # when 'Non SU&G' then [RIS Denom SUAG (copy)_452048844324671492]
-    #
-    # END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql:
+    CASE {% parameter ris_type %}
+      WHEN 'Overall' THEN ${ris_den}
+      WHEN 'SU&G' THEN ${ris_num_suag__copy__990510463076642820}
+      WHEN 'Non SU&G' THEN ${ris_denom_suag__copy__452048844324671492}
+      ELSE NULL
+    END
+  ;;
   }
+
+
 
   dimension: previous_month_mva_den__copy__1028509586701422602 {
     label: "Previous Month MVANum"
@@ -1332,21 +1361,45 @@ view: setupgo_test {
     label: "Market (copy)"
     type: string
     # [REGION]
-    sql: CAST('string' AS STRING) ;;
+    sql: ${region} ;;
   }
 
-  dimension: ris_denom_suag__copy__452048844324671492 {
+  # dimension: ris_denom_suag__copy__452048844324671492 {
+  #   label: "Non RIS Den"
+  #   type: number
+  #   # SUM(IF  [SUAG_SALES_QTY] = 0 or ISNULL([SUAG_SALES_QTY]) and [IS_ELIGIBLE] = TRUE THEN [RIS_DEN] ELSE null END)
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
+
+  measure: ris_denom_suag__copy__452048844324671492 {
     label: "Non RIS Den"
     type: number
-    # SUM(IF  [SUAG_SALES_QTY] = 0 or ISNULL([SUAG_SALES_QTY]) and [IS_ELIGIBLE] = TRUE THEN [RIS_DEN] ELSE null END)
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql:
+    SUM(
+      CASE
+        WHEN (${suag_sales_qty} = 0 OR ${suag_sales_qty} IS NULL)
+         AND ${is_eligible} = TRUE
+        THEN ${ris_den}
+        ELSE NULL
+      END
+    )
+  ;;
   }
 
-  dimension: ris_num_suag__copy__452048844324683781 {
+
+  measure: ris_num_suag__copy__452048844324683781 {
     label: "Non RIS Num"
     type: number
-    # SUM(IF [SUAG_SALES_QTY] = 0 or ISNULL([SUAG_SALES_QTY]) and [IS_ELIGIBLE] = TRUE THEN [RIS_NUM] ELSE null END)
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql:
+    SUM(
+      CASE
+        WHEN (${suag_sales_qty} = 0 OR ${suag_sales_qty} IS NULL)
+         AND ${is_eligible} = TRUE
+        THEN ${ris_num}
+        ELSE NULL
+      END
+    )
+  ;;
   }
 
   measure: ris_num_suag__copy__990510463076642820 {
@@ -1876,16 +1929,16 @@ view: setupgo_test {
     type: number
     sql: ${calculation_452048844323356674} ;;
   }
-  dimension: usr_calculation_452048844325732358_qk {
-    label: "Numerator Shown"
-    type: number
-    sql: ${calculation_452048844325732358} ;;
-  }
-  dimension: usr_numerator_shown__copy__452048844326088711_qk {
-    label: "Denominator Shown"
-    type: number
-    sql: ${numerator_shown__copy__452048844326088711} ;;
-  }
+  # dimension: usr_calculation_452048844325732358_qk {
+  #   label: "Numerator Shown"
+  #   type: number
+  #   sql: ${calculation_452048844325732358} ;;
+  # }
+  # dimension: usr_numerator_shown__copy__452048844326088711_qk {
+  #   label: "Denominator Shown"
+  #   type: number
+  #   sql: ${numerator_shown__copy__452048844326088711} ;;
+  # }
   dimension: none_calculation_1349391106544529422_ok {
     label: "Current Month"
     type: number
@@ -2131,7 +2184,13 @@ view: setupgo_test {
     default_value: "Day"
   }
 
-
+  parameter: RIS_Type{
+    type: string
+    default_value: "Territory"
+    allowed_value: { value: "Overall" }
+    allowed_value: { value: "SU&G" }
+    allowed_value: { value: "Non SU&G" }
+  }
 
 
 }
