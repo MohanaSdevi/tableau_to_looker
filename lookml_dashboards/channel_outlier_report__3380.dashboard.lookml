@@ -10,7 +10,7 @@
   - name: none_supervisor_nk
     title: Supervisor
     type: field_filter
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     field: channeloutlier.none_supervisor_nk
     allow_multiple_values: true
@@ -19,7 +19,7 @@
   - name: none_associate_director_nk
     title: Associate Director
     type: field_filter
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     field: channeloutlier.none_associate_director_nk
     allow_multiple_values: true
@@ -28,7 +28,7 @@
   - name: none_calculation_1214564528552423425_nk
     title: Employee Name
     type: field_filter
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     field: channeloutlier.employee
     allow_multiple_values: true
@@ -37,7 +37,7 @@
   - name: none_director_nk
     title: Director
     type: field_filter
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     field: channeloutlier.none_director_nk
     allow_multiple_values: true
@@ -47,7 +47,7 @@
   - name: ChannelOutlierReport
     title: Channel Outliers
     type: looker_grid
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     fields:
     - channeloutlier.none_center_nk
@@ -73,7 +73,7 @@
   - name: ChannelOutlierReportTargets_Calculation_171136824948584448
     title: Box Close % Threshold
     type: single_value
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     fields:
     - channeloutlier.calculation_171136824948584448
@@ -85,7 +85,7 @@
   - name: ChannelOutlierReportTargets_BoxCloseTargetcopy_260082918621556738
     title: Inb. Transfer % Threshold
     type: single_value
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     fields:
     - channeloutlier.box_close___target__copy__260082918624559108
@@ -97,7 +97,7 @@
   - name: ChannelOutlierReportTargets_BoxCloseTargetcopy_260082918625886218
     title: Sales Time % Threshold
     type: single_value
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     fields:
     - channeloutlier.box_close___target__copy__260082918625312775
@@ -109,7 +109,7 @@
   - name: ChannelOutlierReportTargets_BoxCloseTargetcopy_260082918624559108
     title: Inb. Hold % Threshold
     type: single_value
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     fields:
     - channeloutlier.box_close___target__copy__260082918625886218
@@ -121,7 +121,7 @@
   - name: ChannelOutlierReportTargets_BoxCloseTargetcopy_260082918625312775
     title: Inb. AHT (sec) Threshold
     type: single_value
-    model: tableau_looker_pilot
+    model: tableau_to_looker
     explore: channeloutlier
     fields:
     - channeloutlier.box_close___target__copy__260082918621556738
