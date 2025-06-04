@@ -261,9 +261,6 @@ view: setupgo_test {
     sql: ${TABLE}.PRIORITY_IND ;;
   }
 
-
-
-
   dimension: agent_parameter {
     # TO DO
     # column caption: Date Level Selector
@@ -327,78 +324,129 @@ view: setupgo_test {
     type: string
     sql: CAST('string' AS STRING) ;;
   }
+# *************************************************************************************
+  # dimension: dynamic_1__copy__1245808250023567362 {
+  #   # TO DO
+  #   # column caption: Dynamic 1 (copy)
+  #   # "Market"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
 
-  dimension: dynamic_1__copy__1245808250023567362 {
-    # TO DO
-    # column caption: Dynamic 1 (copy)
-    # "Market"
+  # dimension: dynamic_1__copy__1717841844705943552 {
+  #   # TO DO
+  #   # column caption: Dynamic 2
+  #   # "Territory"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  # dimension: dynamic_1__copy__888898003219451908 {
+  #   # TO DO
+  #   # column caption: Dynamic 2 1
+  #   # "Territory"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  parameter: dynamic_1 {
     type: string
-    sql: CAST('string' AS STRING) ;;
+    default_value: "Market"
+    allowed_value: { value: "Market" }
+    allowed_value: { value: "Territory" }
+    allowed_value: { value: "District" }
+    allowed_value: { value: "Zone" }
+    allowed_value: { value: "Outlet" }
+    allowed_value: { value: "Rep" }
   }
 
-  dimension: dynamic_1__copy__1717841844705943552 {
-    # TO DO
-    # column caption: Dynamic 2
-    # "Territory"
+  dimension: level_01 {
     type: string
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+          WHEN {% parameter dynamic_1 %} = 'Territory' THEN ${territory}
+          WHEN {% parameter dynamic_1 %} = 'District' THEN ${district}
+          WHEN {% parameter dynamic_1 %} = 'Zone' THEN ${zone_nm}
+          WHEN {% parameter dynamic_1 %} = 'Outlet' THEN ${sls_outlet_nm}
+          WHEN {% parameter dynamic_1 %} = 'Market' THEN ${region}
+          WHEN {% parameter dynamic_1 %} = 'Rep' THEN ${employeename}
+          else null
+        END ;;
+  }
+  # *************************************************************************************
+
+  # dimension: dynamic_2__fin_dash___copy__757730672141000706 {
+  #   # TO DO
+  #   # column caption: Dynamic 3 (Fin Dash)
+  #   # "District"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  # dimension: dynamic_2__copy_2__1034139123732033537 {
+  #   # TO DO
+  #   # column caption: Dynamic 2 (AARD)
+  #   # "Territory"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  # dimension: dynamic_2__copy___copy__1581607899270803466 {
+  #   # TO DO
+  #   # column caption: Dynamic 2 (copy) (copy)
+  #   # "Territory"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  # dimension: dynamic_2__copy__1245808250023575555 {
+  #   # TO DO
+  #   # column caption: Dynamic 2 (copy)
+  #   # "Territory"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  # dimension: dynamic_2__copy__1717841844705996801 {
+  #   # TO DO
+  #   # column caption: Dynamic 3
+  #   # "District"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  # dimension: dynamic_2__copy__888898003219595269 {
+  #   # TO DO
+  #   # column caption: Dynamic 3 1
+  #   # "District"
+  #   type: string
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
+  parameter: dynamic_2 {
+    type: string
+    default_value: "Territory"
+    allowed_value: { value: "Market" }
+    allowed_value: { value: "Territory" }
+    allowed_value: { value: "District" }
+    allowed_value: { value: "Zone" }
+    allowed_value: { value: "Outlet" }
+    allowed_value: { value: "Rep" }
   }
 
-  dimension: dynamic_1__copy__888898003219451908 {
-    # TO DO
-    # column caption: Dynamic 2 1
-    # "Territory"
+  dimension: level_02 {
     type: string
-    sql: CAST('string' AS STRING) ;;
-  }
+    sql: CASE
+          WHEN {% parameter dynamic_2 %} = 'Territory' THEN ${territory}
+          WHEN {% parameter dynamic_2 %} = 'District' THEN ${district}
+          WHEN {% parameter dynamic_2 %} = 'Zone' THEN ${zone_nm}
+          WHEN {% parameter dynamic_2 %} = 'Outlet' THEN ${sls_outlet_nm}
+          WHEN {% parameter dynamic_2 %} = 'Market' THEN ${region}
+          WHEN {% parameter dynamic_2 %} = 'Rep' THEN ${employeename}
+          else null
+        END ;;
+        }
 
-  dimension: dynamic_2__fin_dash___copy__757730672141000706 {
-    # TO DO
-    # column caption: Dynamic 3 (Fin Dash)
-    # "District"
-    type: string
-    sql: CAST('string' AS STRING) ;;
-  }
-
-  dimension: dynamic_2__copy_2__1034139123732033537 {
-    # TO DO
-    # column caption: Dynamic 2 (AARD)
-    # "Territory"
-    type: string
-    sql: CAST('string' AS STRING) ;;
-  }
-
-  dimension: dynamic_2__copy___copy__1581607899270803466 {
-    # TO DO
-    # column caption: Dynamic 2 (copy) (copy)
-    # "Territory"
-    type: string
-    sql: CAST('string' AS STRING) ;;
-  }
-
-  dimension: dynamic_2__copy__1245808250023575555 {
-    # TO DO
-    # column caption: Dynamic 2 (copy)
-    # "Territory"
-    type: string
-    sql: CAST('string' AS STRING) ;;
-  }
-
-  dimension: dynamic_2__copy__1717841844705996801 {
-    # TO DO
-    # column caption: Dynamic 3
-    # "District"
-    type: string
-    sql: CAST('string' AS STRING) ;;
-  }
-
-  dimension: dynamic_2__copy__888898003219595269 {
-    # TO DO
-    # column caption: Dynamic 3 1
-    # "District"
-    type: string
-    sql: CAST('string' AS STRING) ;;
-  }
+  # *************************************************************************************
 
   dimension: dynamic_3__fin_dash___copy__757730672164790275 {
     # TO DO
@@ -843,21 +891,56 @@ view: setupgo_test {
     # ELSE "Positive" END
     sql: CAST('string' AS STRING) ;;
   }
+  # *********************************************************Js
 
-  dimension: calculation_434315908847452170 {
-    label: "Date Selector"
+  # dimension: calculation_434315908847452170 {
+  #   label: "Date Selector"
+  #   type: date
+  #   # DATE(
+  #   # CASE [Parameters].[Agent Parameter]
+  #   # WHEN 'Day' THEN [PYMNT_DT]
+  #   # WHEN  'Week' THEN DATETRUNC('week',[PYMNT_DT],'sunday')
+  #   # WHEN 'Month' THEN DATETRUNC('month',[PYMNT_DT])
+  #   # When 'Quarter' Then DATETRUNC('quarter',[PYMNT_DT])
+  #   # When 'Year' Then DATETRUNC('year',[PYMNT_DT])
+  #   # END
+  #   # )
+  #   sql: CAST('1970-01-01 00:00:00' AS TIMESTAMP) ;;
+  # }
+
+  # dimension: calculation_434315908847452170 {
+  #     label: "Date Selector"
+  #     type: date
+  #       sql:
+  #           CASE
+  #             WHEN ${% parameter date_level_selector %} = 'Day' THEN ${pymnt_dt}
+  #             WHEN ${% parameter date_level_selector %} = 'Week' THEN DATE_TRUNC(${pymnt_dt}, WEEK(SUNDAY))
+  #             WHEN ${% parameter date_level_selector %} = 'Month' THEN DATE_TRUNC(${pymnt_dt}, MONTH)
+  #             WHEN ${% parameter date_level_selector %} = 'Quarter' THEN DATE_TRUNC(${pymnt_dt}, QUARTER)
+  #             WHEN ${% parameter date_level_selector %} = 'Year' THEN DATE_TRUNC(${pymnt_dt}, YEAR)
+  #             ELSE NULL
+  #           END ;;
+  #     }
+
+
+   dimension: calculation_434315908847452170 {
+    label: "Date Selector_1"
     type: date
-    # DATE(
-    # CASE [Parameters].[Agent Parameter]
-    # WHEN 'Day' THEN [PYMNT_DT]
-    # WHEN  'Week' THEN DATETRUNC('week',[PYMNT_DT],'sunday')
-    # WHEN 'Month' THEN DATETRUNC('month',[PYMNT_DT])
-    # When 'Quarter' Then DATETRUNC('quarter',[PYMNT_DT])
-    # When 'Year' Then DATETRUNC('year',[PYMNT_DT])
-    # END
-    # )
-    sql: CAST('1970-01-01 00:00:00' AS TIMESTAMP) ;;
+    sql:
+      CASE
+        WHEN {% parameter date_level_selector %} = 'Day' THEN ${tdy_pymnt_dt_qk}
+        WHEN {% parameter date_level_selector %} = 'Week' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, WEEK(SUNDAY))
+        WHEN {% parameter date_level_selector %} = 'Month' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, MONTH)
+        WHEN {% parameter date_level_selector %} = 'Quarter' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, QUARTER)
+        WHEN {% parameter date_level_selector %} = 'Year' THEN DATE_TRUNC(${tdy_pymnt_dt_qk}, YEAR)
+        ELSE ${tdy_pymnt_dt_qk}
+      END ;;
   }
+
+
+
+
+  # *********************************************************************
 
   dimension: calculation_452048844323356674 {
     label: "RIS (for views)"
@@ -964,14 +1047,16 @@ view: setupgo_test {
     # [Selected Month MVA Num (copy)_1028509586700484616]/[Previous Month MVANum (copy)_1028509586701479947]-1
     sql: CAST(100.0 AS NUMERIC) ;;
   }
-
+# ******************************************JN*******************************************
   measure: calculation_978688514352406528 {
     label: "Take Rate %"
     type: number
-    sql: SAFE_DIVIDE(SUM(${suag_num__copy__452048844292403200}),SUM(${suag_den})) ;;
+   sql: SAFE_DIVIDE(SUM(${suag_num__copy__452048844292403200}),SUM(${suag_den})) ;;
     value_format: "0.0%"
     # SUM([SUAG_NUM (copy)_452048844292403200])/SUM([SUAG_DEN])
   }
+
+  # *****************************************JN********************************************
 
   dimension: calculation_978688514360860676 {
     label: "Selected Month Sales"
@@ -1044,27 +1129,77 @@ view: setupgo_test {
        ELSE ${device_grouping}
      END ;;
   }
+  # ***************************************************************************************
+
+  # dimension: date_selector__copy__434315908848119819 {
+  #   label: "Date Selector (copy)"
+  #   type: string
+  #   # Case [Parameters].[Agent Parameter]
+  #   #     WHEN 'Day' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
+  #   #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
+  #   #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
+  #   #     WHEN 'Week' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
+  #   #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
+  #   #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
+  #   #     WHEN 'Month' THEN LEFT(DATENAME('month',[Calculation_434315908847452170]),3)
+  #   #         + " " + DATENAME('year',[Calculation_434315908847452170])
+  #   #     WHEN 'Quarter' Then DATENAME('quarter',[Calculation_434315908847452170])
+  #   #         + "Q " + "' " + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
+  #   #
+  #   #     WHEN 'Year' THEN DATENAME('year',[Calculation_434315908847452170])
+  #   #
+  #   #     END
+  #   sql: CAST('string' AS STRING) ;;
+  # }
+
 
   dimension: date_selector__copy__434315908848119819 {
-    label: "Date Selector (copy)"
+    label: "Date Selector (copy)1"
     type: string
-    # Case [Parameters].[Agent Parameter]
-    #     WHEN 'Day' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
-    #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
-    #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
-    #     WHEN 'Week' THEN STR(DATEPART('month',[Calculation_434315908847452170]))
-    #         + "/" + STR(DATEPART('day',[Calculation_434315908847452170]))
-    #         + "/" + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
-    #     WHEN 'Month' THEN LEFT(DATENAME('month',[Calculation_434315908847452170]),3)
-    #         + " " + DATENAME('year',[Calculation_434315908847452170])
-    #     WHEN 'Quarter' Then DATENAME('quarter',[Calculation_434315908847452170])
-    #         + "Q " + "' " + RIGHT(DATENAME('year',[Calculation_434315908847452170]),2)
-    #
-    #     WHEN 'Year' THEN DATENAME('year',[Calculation_434315908847452170])
-    #
-    #     END
-    sql: CAST('string' AS STRING) ;;
+    sql:
+    CASE
+        WHEN {% parameter date_level_selector %} = 'Day' THEN
+          FORMAT_DATE('%m/%d/%y', ${tdy_pymnt_dt_qk})
+        WHEN {% parameter date_level_selector %} = 'Week' THEN
+          FORMAT_DATE('%m/%d/%y', ${tdy_pymnt_dt_qk})
+        WHEN {% parameter date_level_selector %} = 'Month' THEN
+          FORMAT_DATE('%b %Y', ${tdy_pymnt_dt_qk})
+        WHEN {% parameter date_level_selector %} = 'Quarter' THEN
+          CONCAT(
+            'Q', CAST(EXTRACT(QUARTER FROM ${tdy_pymnt_dt_qk}) AS STRING),
+            " '",
+            SUBSTR(CAST(EXTRACT(YEAR FROM ${tdy_pymnt_dt_qk}) AS STRING), 3, 2)
+          )
+        WHEN {% parameter date_level_selector %} = 'Year' THEN
+          CAST(EXTRACT(YEAR FROM ${tdy_pymnt_dt_qk}) AS STRING)
+        ELSE FORMAT_DATE('%m/%d/%y', ${tdy_pymnt_dt_qk})
+      END ;;
   }
+
+  # filter: date_level_selector {
+  #   type: string
+  # }
+
+
+  # dimension: formatted_date {
+  #   type: string
+  #   sql:
+  #   {% if date_level_selector._value == 'Day' or date_level_selector._value == 'Week' %}
+  #     FORMAT_TIMESTAMP('%m/%d/%y', ${date_selector})
+  #   {% elsif date_level_selector._value == 'Month' %}
+  #     FORMAT_TIMESTAMP('%b %Y', ${date_selector})
+  #   {% elsif date_level_selector._value == 'Quarter' %}
+  #     CONCAT('Q', CAST(EXTRACT(QUARTER FROM ${date_selector}) AS STRING), ' ', RIGHT(CAST(EXTRACT(YEAR FROM ${date_selector}) AS STRING), 2))
+  #   {% elsif date_level_selector._value == 'Year' %}
+  #     CAST(EXTRACT(YEAR FROM ${date_selector}) AS STRING)
+  #   {% else %}
+  #     NULL
+  #   {% endif %} ;;
+  # }
+
+  # *************************************************************************************
+
+
 
   dimension: level_selection_1__copy__1581607899268554757 {
     label: "Level 1 "
@@ -1279,7 +1414,7 @@ view: setupgo_test {
     sql: CASE WHEN ${suag_item_cd} = 'C65' then ${suag_num__copy__452048844292403200}
     END ;;
   }
-
+# ********************Nishok**********************************
   dimension: suag_num__copy__452048844292403200 {
     label: "SUAG_NUM (new)"
     type: number
@@ -1294,7 +1429,8 @@ view: setupgo_test {
     WHEN ${suag_item_cd} =  'C65' then ${suag_num}
     WHEN ${suag_item_cd} = 'C5697' then ${suag_num}
     END ;;
-  }
+    }
+  # ********************Nishok**********************************
 
   dimension: suag_num__new___copy__788692951555125248 {
     label: "SU&G Single"
@@ -1304,6 +1440,8 @@ view: setupgo_test {
     sql: CASE WHEN ${suag_item_cd} = 'C3518' then ${suag_num__copy__452048844292403200}
     END ;;
   }
+
+  # ********************Nishok**********************************
 
   dimension: sales_color__copy__1349391106598535201 {
     label: "TR color"
@@ -1956,5 +2094,44 @@ view: setupgo_test {
     type: sum
     sql: ${net_sales} ;;
   }
+
+  # parameter: date_level_selector {
+  #   type: string
+  #   default_value: "Day"
+  #   allowed_value: { value: "Day" }
+  #   allowed_value: { value: "Week" }
+  #   allowed_value: { value: "Month" }
+  #   allowed_value: { value: "Quater" }
+  #   allowed_value: { value: "Year" }
+  # }
+
+
+  parameter: date_level_selector {
+    type: string
+    allowed_value: {
+      label: "Day"
+      value: "Day"
+    }
+    allowed_value: {
+      label: "Week"
+      value: "Week"
+    }
+    allowed_value: {
+      label: "Month"
+      value: "Month"
+    }
+    allowed_value: {
+      label: "Quarter"
+      value: "Quarter"
+    }
+    allowed_value: {
+      label: "Year"
+      value: "Year"
+    }
+    default_value: "Day"
+  }
+
+
+
 
 }

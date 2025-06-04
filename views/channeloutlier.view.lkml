@@ -1,4 +1,4 @@
-view: channeloutlier {
+view:channeloutlier {
   sql_table_name: `elastic-pocs.Super_Store_Sales.ChannelOutlier` ;;
 
 
@@ -1829,41 +1829,68 @@ view: channeloutlier {
     sql: CAST({% parameter box_close_target_copy_260082918625714185 %} AS FLOAT64) ;;
   }
 
-  dimension: box_close_performance__copy__260082918621360129 {
+  measure: box_close_performance__copy__260082918621360129 {
     label: "Inb. AHT (sec) Performance"
     type: string
     # If [Inb. AHT (Min.) (copy)] < [Box Close % Target (copy)_260082918621556738] and [Inb. AHT (Min.) (copy)] >0 then 'Below Threshold'
     # ElseIf [Inb. AHT (Min.) (copy)] >= [Box Close % Target (copy)_260082918621556738] then 'Above Threshold'
     # ElseIf [Inb. AHT (Min.) (copy)] = 0 then 'Null'
     # END
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+        WHEN ${inb__aht__min____copy_} < ${box_close___target__copy__260082918621556738}
+             AND ${inb__aht__min____copy_} > 0
+          THEN 'Below Threshold'
+        WHEN ${inb__aht__min____copy_} >= ${box_close___target__copy__260082918621556738}
+          THEN 'Above Threshold'
+        WHEN ${inb__aht__min____copy_} = 0
+          THEN 'Null'
+        ELSE NULL
+      END ;;
   }
 
-  dimension: box_close_performance__copy__260082918624665605 {
+  measure: box_close_performance__copy__260082918624665605 {
     label: "Inb. Transfer % Performance"
     type: string
     # If [Calculation_1133781239939878919] < [Box Close % Target (copy)_260082918624559108] then 'Below Threshold'
     # ElseIf [Calculation_1133781239939878919] >= [Box Close % Target (copy)_260082918624559108] then 'Above Threshold'
     # END
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+        WHEN ${calculation_1133781239939878919} < ${box_close___target__copy__260082918624559108}
+          THEN 'Below Threshold'
+        WHEN ${calculation_1133781239939878919} >= ${box_close___target__copy__260082918624559108}
+          THEN 'Above Threshold'
+        ELSE NULL
+      END ;;
   }
 
-  dimension: box_close_performance__copy__260082918625415176 {
+  measure: box_close_performance__copy__260082918625415176 {
     label: "Sales Time % Performance"
     type: string
     # If [Calculation_1133781239941214217] < [Box Close % Target (copy)_260082918625312775] then 'Below Threshold'
     # ElseIf [Calculation_1133781239941214217] >= [Box Close % Target (copy)_260082918625312775] then 'Above Threshold'
     # END
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+        WHEN ${calculation_1133781239941214217} < ${box_close___target__copy__260082918625312775}
+          THEN 'Below Threshold'
+        WHEN ${calculation_1133781239941214217} >= ${box_close___target__copy__260082918625312775}
+          THEN 'Above Threshold'
+        ELSE NULL
+      END ;;
   }
 
-  dimension: box_close_performance__copy__260082918626107403 {
+  measure: box_close_performance__copy__260082918626107403 {
     label: "Inb. Hold % Performance"
     type: string
     # If [Calculation_992762280533958658] < [Box Close % Target (copy)_260082918625886218] then 'Below Threshold'
     # ElseIf [Calculation_992762280533958658] >= [Box Close % Target (copy)_260082918625886218] then 'Above Threshold'
     # END
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+        WHEN ${calculation_992762280533958658} < ${box_close___target__copy__260082918625886218}
+          THEN 'Below Threshold'
+        WHEN ${calculation_992762280533958658} >= ${box_close___target__copy__260082918625886218}
+          THEN 'Above Threshold'
+        ELSE NULL
+      END ;;
   }
 
   dimension: calculation_104427271734177792 {
@@ -1876,10 +1903,7 @@ view: channeloutlier {
   measure: calculation_1133781239939878919 {
     label: "Inb. Transfer %"
     type: number
-    sql: CASE
-        WHEN SUM(${clstrnsout}) <> 0 THEN SUM(${clstrnsout}) / NULLIF(SUM(${clsinbhndl}), 0)
-        ELSE 0
-      END ;;
+    sql: CASE WHEN SUM(${clstrnsout}) <> 0 THEN SUM(${clstrnsout}) / NULLIF(SUM(${clsinbhndl}), 0) ELSE 0 END ;;
   }
 
   measure: calculation_1133781239941214217 {
@@ -1920,7 +1944,7 @@ view: channeloutlier {
     sql: CAST('string' AS STRING) ;;
   }
 
-  dimension: calculation_1501950520819040256 {
+  measure: calculation_1501950520819040256 {
     label: "Sign On Hours"
     type: string
     # If [Calculation_104427271734177792] < 20 then 'Under 20'
@@ -1928,7 +1952,19 @@ view: channeloutlier {
     # ElseIF [Calculation_104427271734177792] >=40 and [Calculation_104427271734177792] < 60 then '40-60 Hours'
     # ELSEIF [Calculation_104427271734177792] >= 60 then '60+ Hours'
     # END
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+        WHEN ${calculation_104427271734177792} < 20
+          THEN 'Under 20'
+        WHEN ${calculation_104427271734177792} >= 20
+             AND ${calculation_104427271734177792} < 40
+          THEN '20-40 Hours'
+        WHEN ${calculation_104427271734177792} >= 40
+             AND ${calculation_104427271734177792} < 60
+          THEN '40-60 Hours'
+        WHEN ${calculation_104427271734177792} >= 60
+          THEN '60+ Hours'
+        ELSE NULL
+      END ;;
   }
 
   dimension: calculation_171136824948584448 {
@@ -1938,19 +1974,34 @@ view: channeloutlier {
     sql: CAST({% parameter parameter_7 %} AS FLOAT64) ;;
   }
 
-  dimension: calculation_171136824952332290 {
+  measure: calculation_171136824952332290 {
     label: "Box Close Performance"
     type: string
     # If [Calculation_2493868328550068237] < [Calculation_171136824948584448] then 'Below Threshold'
     # ElseIf [Calculation_2493868328550068237] >= [Calculation_171136824948584448] then 'Above Threshold'
     # END
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+        WHEN ${calculation_104427271734177792} < 20
+          THEN 'Under 20'
+        WHEN ${calculation_104427271734177792} >= 20
+             AND ${calculation_104427271734177792} < 40
+          THEN '20-40 Hours'
+        WHEN ${calculation_104427271734177792} >= 40
+             AND ${calculation_104427271734177792} < 60
+          THEN '40-60 Hours'
+        WHEN ${calculation_104427271734177792} >= 60
+          THEN '60+ Hours'
+        ELSE NULL
+      END ;;
   }
 
   measure: calculation_2493868328550068237 {
     label: "Boxes Close %"
     type: number
-    sql: CASE WHEN SUM(${boxeisup00}) <> 0 THEN SUM(${boxeisup00}) / NULLIF(SUM(${clsinbhndl}), 0) ELSE 0 END  ;;
+    sql: CASE
+        WHEN SUM(${boxeisup00}) <> 0 THEN SUM(${boxeisup00}) / NULLIF(SUM(${clsinbhndl}), 0)
+        ELSE 0
+      END ;;
   }
 
   measure: calculation_992762280533958658 {
@@ -1966,7 +2017,7 @@ view: channeloutlier {
      CASE
        WHEN ${center} IN ('value1', 'value2', ...) THEN '<group_name_1>'
        WHEN ${center} IN ('value3', 'value3', ...) THEN '<group_name_2>'
-       ELSE ${center}  -- This is the default value, if any static value present replace that
+       ELSE ${center}
      END ;;
   }
 
@@ -2068,25 +2119,25 @@ view: channeloutlier {
     sql: ${supervisor} ;;
   }
 
-  dimension: usr_box_close_performance__copy__260082918621360129_nk {
+  measure: usr_box_close_performance__copy__260082918621360129_nk {
     label: "Inb. AHT (sec) Performance"
     type: string
     sql: ${box_close_performance__copy__260082918621360129} ;;
   }
 
-  dimension: usr_box_close_performance__copy__260082918624665605_nk {
+  measure: usr_box_close_performance__copy__260082918624665605_nk {
     label: "Inb. Transfer % Performance"
     type: string
     sql: ${box_close_performance__copy__260082918624665605} ;;
   }
 
-  dimension: usr_box_close_performance__copy__260082918625415176_nk {
+  measure: usr_box_close_performance__copy__260082918625415176_nk {
     label: "Sales Time % Performance"
     type: string
     sql: ${box_close_performance__copy__260082918625415176} ;;
   }
 
-  dimension: usr_box_close_performance__copy__260082918626107403_nk {
+  measure: usr_box_close_performance__copy__260082918626107403_nk {
     label: "Inb. Hold % Performance"
     type: string
     sql: ${box_close_performance__copy__260082918626107403} ;;
@@ -2104,13 +2155,13 @@ view: channeloutlier {
     sql: ${calculation_1133781239941214217} ;;
   }
 
-  dimension: usr_calculation_1501950520819040256_nk {
+  measure: usr_calculation_1501950520819040256_nk {
     label: "Sign On Hours"
     type: string
     sql: ${calculation_1501950520819040256} ;;
   }
 
-  dimension: usr_calculation_171136824952332290_nk {
+  measure: usr_calculation_171136824952332290_nk {
     label: "Box Close Performance"
     type: string
     sql: ${calculation_171136824952332290} ;;
