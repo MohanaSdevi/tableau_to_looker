@@ -11,7 +11,7 @@ view: setupgo_test {
 
   dimension: pymnt_dt {
     label: "PYMNT_DT"
-    type: date_time
+    type: date_raw
     sql: CAST(${TABLE}.PYMNT_DT AS TIMESTAMP) ;;
   }
 
@@ -600,12 +600,25 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: parameter_6 {
-    # TO DO
-    # column caption: Ranking Granularity
-    # "Territory"
+  parameter: parameter_6 {
+
     type: string
-    sql: CAST('string' AS STRING) ;;
+    allowed_value: {
+      label: "Territory"
+      value: "Territory"
+    }
+    allowed_value: {
+      label: "District"
+      value: "District"
+    }
+    allowed_value: {
+      label: "Zone"
+      value: "Zone"
+    }
+    allowed_value: {
+      label: "Outlet"
+      value: "Outlet"
+    }
   }
 
   dimension: parameter_7 {
@@ -624,20 +637,20 @@ view: setupgo_test {
     sql: CAST('string' AS STRING) ;;
   }
 
-  dimension: parameter_9 {
+  parameter: parameter_9 {
     # TO DO
     # column caption: Start Date
     # #2024-12-01#
-    type: date
-    sql: CAST('1970-01-01 00:00:00' AS TIMESTAMP) ;;
+    label: "Start Date"
+    type: date_time
   }
 
-  dimension: start_date__copy__456270959335051266 {
+  parameter: start_date__copy__456270959335051266 {
     # TO DO
     # column caption: End Date
     # #2024-12-31#
-    type: date
-    sql: CAST('1970-01-01 00:00:00' AS TIMESTAMP) ;;
+    label: "End Date"
+    type: date_time
   }
 
   dimension: sub_categroty_state__copy__90634988739022848 {
@@ -716,11 +729,11 @@ view: setupgo_test {
     sql: CAST(FALSE AS BOOL) ;;
   }
 
-  dimension: calculation_1581607899260530688 {
+  measure: calculation_1581607899260530688 {
     label: "Revenue"
     type: number
     # sum([SUAG_ITEM_REVENUE_AMT])
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: sum(${suag_item_revenue_amt}) ;;
   }
 
   dimension: calculation_1581607899286167568 {
@@ -748,14 +761,14 @@ view: setupgo_test {
     label: "MD All In"
     type: number
     # If Not [SUAG_ITEM_CD] = 'C3518' then [SUAG_NUM (copy)_452048844292403200] END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CASE WHEN ${suag_item_cd} <> 'C3518' then ${suag_num__copy__452048844292403200} END ;;
   }
 
-  dimension: calculation_1664924554374983683 {
+  measure: calculation_1664924554374983683 {
     label: "Device Revenue"
     type: number
     # [Calculation_1581607899260530688] / sum([SUAG_NUM (copy)_452048844292403200])
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: SAFE_DIVIDE(${calculation_1581607899260530688},sum(${suag_num__copy__452048844292403200}));;
   }
 
   dimension: calculation_1717841844706463747 {
@@ -813,7 +826,7 @@ view: setupgo_test {
     # If [PYMNT_DT] >= [Parameters].[Parameter 9] and [PYMNT_DT] <= [Parameters].[Start Date (copy)_456270959335051266]
     # Then True
     # END
-    sql: CAST(FALSE AS BOOL) ;;
+    sql: ${pymnt_dt} >= {% parameter parameter_9 %} AND ${pymnt_dt} <= {% parameter start_date__copy__456270959335051266 %};;
   }
 
   dimension: calculation_416301531451969554 {
@@ -889,15 +902,12 @@ view: setupgo_test {
   dimension: calculation_619807904201347075 {
     label: "Ranking Granularity"
     type: string
-    # Case [Parameters].[Parameter 6]
-    #
-    # When 'Territory' Then [TERRITORY]
-    # When 'District' Then [DISTRICT]
-    # When 'Zone' Then [Calculation_412079422482219008]
-    # When 'Outlet' Then [REGION]
-    #
-    # END
-    sql: CAST('string' AS STRING) ;;
+    sql: CASE
+          WHEN {% parameter parameter_6 %} = 'Territory' THEN ${territory}
+          WHEN {% parameter parameter_6 %} = 'District' THEN ${district}
+          WHEN {% parameter parameter_6 %} = 'Zone' THEN ${zone_nm}
+          WHEN {% parameter parameter_6 %} = 'Outlet' THEN ${sls_outlet_nm}
+        END ;;
   }
 
   dimension: calculation_681732406177177602 {
@@ -955,10 +965,10 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: calculation_978688514352406528 {
+  measure: calculation_978688514352406528 {
     label: "Take Rate %"
     type: number
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: SAFE_DIVIDE(SUM(${suag_num__copy__452048844292403200}),SUM(${suag_den})) ;;
     value_format: "0.0%"
     # SUM([SUAG_NUM (copy)_452048844292403200])/SUM([SUAG_DEN])
   }
@@ -988,18 +998,18 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: calculation_990510463076048899 {
+  measure: calculation_990510463076048899 {
     label: "RIS Num SUAG"
     type: number
     # SUM(IF  [SUAG_SALES_QTY]  > 0 AND [IS_ELIGIBLE] = TRUE THEN [RIS_NUM] ELSE NULL END)
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: SUM(CASE WHEN  ${suag_sales_qty}  > 0 AND ${is_eligible} = TRUE THEN ${ris_num} ELSE NULL END) ;;
   }
 
-  dimension: calculation_990510463077076997 {
+  measure: calculation_990510463077076997 {
     label: "Suag RIS %"
     type: number
     # [Calculation_990510463076048899]/[RIS Num SUAG (copy)_990510463076642820]
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: ${calculation_990510463076048899}/${ris_num_suag__copy__990510463076642820} ;;
   }
 
   dimension: current_month__copy__1349391106544603151 {
@@ -1014,11 +1024,11 @@ view: setupgo_test {
     type: string
     sql:
      CASE
-       WHEN ${device_grouping} IN ('"C2212"') THEN '"C2212"'
-       WHEN ${device_grouping} IN ('"C3913"') THEN '"C3913"'
-       WHEN ${device_grouping} IN ('"C6677"') THEN '"C6677"'
-       WHEN ${device_grouping} IN ('"C8857\n"') THEN '"C8857\n"'
-       ELSE ${device_grouping}
+       WHEN ${device_grouping} = "C2212" THEN "C2212"
+       WHEN ${device_grouping} = "C3913" THEN "C3913"
+       WHEN ${device_grouping} = "C6677" THEN "C6677"
+       WHEN ${device_grouping} = "C8857" THEN "C8857"
+       ELSE "Other"
      END ;;
   }
 
@@ -1117,11 +1127,11 @@ view: setupgo_test {
     sql: CAST('string' AS STRING) ;;
   }
 
-  dimension: md_all_in__copy__1664924554372804609 {
+  measure: md_all_in__copy__1664924554372804609 {
     label: "Lines Per MD"
     type: number
     # sum([Calculation_1664924554371538944]) / sum([SU&G Single (copy)_788692951555624961])
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: SAFE_DIVIDE(SUM(${calculation_1664924554371538944}),SUM(${su_g_single__copy__788692951555624961}));;
   }
 
   dimension: mva_den__copy__1028509586700185606 {
@@ -1204,11 +1214,11 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: ris_num_suag__copy__990510463076642820 {
+  measure: ris_num_suag__copy__990510463076642820 {
     label: "RIS Denom SUAG"
     type: number
     # SUM(IF  [SUAG_SALES_QTY]  > 0 AND [IS_ELIGIBLE] = TRUE THEN [RIS_DEN] ELSE null END)
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: SUM(CASE WHEN ${suag_sales_qty}  > 0 AND ${is_eligible} = TRUE THEN ${ris_den} ELSE null END) ;;
   }
 
   dimension: rev___run__copy__681732406200926213 {
@@ -1235,14 +1245,14 @@ view: setupgo_test {
     label: "Revenue (MD)"
     type: number
     # If [SUAG_ITEM_CD] = 'C65' THEN [SUAG_ITEM_REVENUE_AMT] END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CASE WHEN ${suag_item_cd} = 'C65' THEN ${suag_item_revenue_amt} END ;;
   }
 
   dimension: revenue__copy__788692951560839171 {
     label: "Revenue (Single)"
     type: number
     # If [SUAG_ITEM_CD] = 'C3518' THEN [SUAG_ITEM_REVENUE_AMT] END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CASE WHEN ${suag_item_cd} = 'C3518' THEN ${suag_item_revenue_amt} END ;;
   }
 
   dimension: sls_outlet_nm__copy__382524523017302022 {
@@ -1257,7 +1267,8 @@ view: setupgo_test {
     type: number
     # If [SUAG_ITEM_CD] = 'C5697' then [SUAG_NUM]
     # END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CASE WHEN ${suag_item_cd} = 'C5697' then ${suag_num}
+    END ;;
   }
 
   dimension: su_g_single__copy__788692951555624961 {
@@ -1265,7 +1276,8 @@ view: setupgo_test {
     type: number
     # If [SUAG_ITEM_CD] = 'C65' then [SUAG_NUM (copy)_452048844292403200]
     # END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CASE WHEN ${suag_item_cd} = 'C65' then ${suag_num__copy__452048844292403200}
+    END ;;
   }
 
   dimension: suag_num__copy__452048844292403200 {
@@ -1277,7 +1289,11 @@ view: setupgo_test {
     # ELSEIF [SUAG_ITEM_CD] =  'C65' then [SUAG_NUM]
     # elseif [SUAG_ITEM_CD] = 'C5697' then [SUAG_NUM]
     # END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CASE WHEN ${suag_num} IS NULL then 0
+    WHEN ${suag_item_cd} = 'C3518' then ${suag_num}
+    WHEN ${suag_item_cd} =  'C65' then ${suag_num}
+    WHEN ${suag_item_cd} = 'C5697' then ${suag_num}
+    END ;;
   }
 
   dimension: suag_num__new___copy__788692951555125248 {
@@ -1285,7 +1301,8 @@ view: setupgo_test {
     type: number
     # If [SUAG_ITEM_CD] = 'C3518' then [SUAG_NUM (copy)_452048844292403200]
     # END
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CASE WHEN ${suag_item_cd} = 'C3518' then ${suag_num__copy__452048844292403200}
+    END ;;
   }
 
   dimension: sales_color__copy__1349391106598535201 {
@@ -1528,25 +1545,28 @@ view: setupgo_test {
     type: string
     sql: ${territory} ;;
   }
-  dimension: usr_calculation_990510463077076997_qk {
+  measure: usr_calculation_990510463077076997_qk {
     label: "Suag RIS %"
     type: number
     sql: ${calculation_990510463077076997} ;;
+    value_format: "0.0%"
   }
   measure: sum_calculation_949133628397023232_qk {
     label: "Window Max Rev Value"
     type: sum
     sql: ${calculation_949133628397023232} ;;
   }
-  dimension: usr_calculation_1581607899260530688_qk {
+  measure: usr_calculation_1581607899260530688_qk {
     label: "Revenue"
     type: number
     sql: ${calculation_1581607899260530688} ;;
+    value_format: "$0"
   }
-  dimension: usr_calculation_978688514352406528_qk {
+  measure: usr_calculation_978688514352406528_qk {
     label: "Take Rate %"
     type: number
     sql: ${calculation_978688514352406528} ;;
+    value_format: "0.0%"
   }
   dimension: none_calculation_464996668061204481_qk {
     label: "Data Refreshed"
@@ -1567,6 +1587,13 @@ view: setupgo_test {
     label: "SUAG_NUM (new)"
     type: sum
     sql: ${suag_num__copy__452048844292403200} ;;
+    value_format: "0.0"
+  }
+  measure: sum_suag_num__copy__452048844292403200_nk {
+    label: "SUAG_NUM (new) + 1.5"
+    type: number
+    sql: CASE WHEN SUM(${suag_num__copy__452048844292403200}) IS NULL THEN 1.5 ELSE (SUM(${suag_num__copy__452048844292403200})+1.5) END;;
+    value_format: "0.0"
   }
   dimension: usr_calculation_1058908867714613255_qk {
     label: "(SUM([Suag Num])) + 1"
@@ -1587,6 +1614,7 @@ view: setupgo_test {
     label: "Suag Den"
     type: sum
     sql: ${suag_den} ;;
+    value_format: "0.0"
   }
   measure: sum_suag_net_sales_qk {
     label: "Suag Net Sales"
@@ -1597,36 +1625,43 @@ view: setupgo_test {
     label: "Revenue (MD)"
     type: sum
     sql: ${revenue__single___copy__788692951561256964} ;;
+    value_format: "$0"
   }
   measure: sum_revenue__copy__788692951560839171_qk {
     label: "Revenue (Single)"
     type: sum
     sql: ${revenue__copy__788692951560839171} ;;
+    value_format: "$0"
   }
   measure: sum_su_g_md__copy__788692951569780741_qk {
     label: "SU&G MD (Other Lines)"
     type: sum
     sql: ${su_g_md__copy__788692951569780741} ;;
+    value_format: "0.0"
   }
   measure: sum_su_g_single__copy__788692951555624961_qk {
     label: "SU&G MD"
     type: sum
     sql: ${su_g_single__copy__788692951555624961} ;;
+    value_format: "0.0"
   }
   measure: sum_suag_num__new___copy__788692951555125248_qk {
     label: "SU&G Single"
     type: sum
     sql: ${suag_num__new___copy__788692951555125248} ;;
+    value_format: "0.0"
   }
-  dimension: usr_calculation_1664924554374983683_qk {
+  measure: usr_calculation_1664924554374983683_qk {
     label: "Device Revenue"
     type: number
     sql: ${calculation_1664924554374983683} ;;
+    value_format: "$0.00"
   }
-  dimension: usr_md_all_in__copy__1664924554372804609_qk {
+  measure: usr_md_all_in__copy__1664924554372804609_qk {
     label: "Lines Per MD"
     type: number
     sql: ${md_all_in__copy__1664924554372804609} ;;
+    value_format: "0.0"
   }
   dimension: usr_suag_ris____copy__452048844324614147_qk {
     label: "Non Suag Ris"
