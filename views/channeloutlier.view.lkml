@@ -171,6 +171,7 @@ view:channeloutlier {
     sql: ${TABLE}.Rprt_Date ;;
   }
 
+
   dimension: rprt_month {
     label: "Rprt_Month"
     type: string
@@ -2214,11 +2215,15 @@ view:channeloutlier {
     type: number
     sql: ${calculation_171136824948584448} ;;
   }
+  dimension: rprt_date_converted {
+    label: "Rprt_Date (as Date)"
+    type: date
+    sql: PARSE_DATE('%d/%m/%Y', ${rprt_date}) ;;
+  }
 
   measure: max_rprt_date_qk {
     label: "Rprt Date"
-    type: max
-    sql: ${rprt_date} ;;
+    type: date
+    sql: max(${rprt_date_converted}) ;;
   }
-
 }
