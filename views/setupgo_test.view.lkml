@@ -2331,4 +2331,18 @@ dimension: mva_indicator1 {
     sql: CASE WHEN ${suag_num} > 0 THEN 'Y' ELSE 'N' END ;;
   }
 
+  dimension: rpt_mth1 {
+    label: "RPT_MTH1"
+    type: string
+    sql: FORMAT_TIMESTAMP('%b-%Y', CAST(${TABLE}.RPT AS TIMESTAMP)) ;;
+  }
+
+  dimension: rpt_mth2 {
+    label: "RPT_MTH2"
+    type: string
+    sql: FORMAT_TIMESTAMP('%B %Y', CAST(${rpt_mth} AS TIMESTAMP)) ;;
+  }
+
+
+
 }
