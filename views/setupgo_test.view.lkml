@@ -1377,7 +1377,7 @@ view: setupgo_test {
     sql:
     SUM(
       CASE
-        WHEN (${suag_sales_qty} = 0 OR ${suag_sales_qty} IS NULL)
+        WHEN (${suag_sales_qty} > 0 OR ${suag_sales_qty} IS NULL)
          AND ${is_eligible} = TRUE
         THEN ${ris_den}
         ELSE NULL
@@ -1393,7 +1393,7 @@ view: setupgo_test {
     sql:
     SUM(
       CASE
-        WHEN (${suag_sales_qty} = 0 OR ${suag_sales_qty} IS NULL)
+        WHEN (${suag_sales_qty} > 0 OR ${suag_sales_qty} IS NULL)
          AND ${is_eligible} = TRUE
         THEN ${ris_num}
         ELSE NULL
@@ -2184,13 +2184,151 @@ view: setupgo_test {
     default_value: "Day"
   }
 
-  parameter: RIS_Type{
+
+##### Changes
+
+  parameter: dynamic_3 {
     type: string
-    default_value: "Territory"
-    allowed_value: { value: "Overall" }
-    allowed_value: { value: "SU&G" }
-    allowed_value: { value: "Non SU&G" }
+    default_value: "District"
+    allowed_value: { value: "Market" }
+    allowed_value: { value: "Territory" }
+    allowed_value: { value: "District" }
+    allowed_value: { value: "Zone" }
+    allowed_value: { value: "Outlet" }
+    allowed_value: { value: "Rep" }
   }
 
+
+  parameter: dynamic_4 {
+    type: string
+    default_value: "Outlet"
+    allowed_value: { value: "Market" }
+    allowed_value: { value: "Territory" }
+    allowed_value: { value: "District" }
+    allowed_value: { value: "Zone" }
+    allowed_value: { value: "Outlet" }
+    allowed_value: { value: "Rep" }
+  }
+
+
+  parameter: RIS_Type{
+    type: string
+   default_value: "Overall"
+    allowed_value: {
+      label: "Overall"
+      value: "Overall"
+    }
+    allowed_value: {
+      label: "SU&G"
+      value: "SU&G"
+    }
+    allowed_value: {
+      label: "Non SU&G"
+      value: "Non SU&G"
+    }
+  }
+
+  measure: Suag_RIS {
+    label: "Suag RIS1 %"
+    type: number
+    sql: ${calculation_990510463077076997} ;;
+    value_format_name: percent_1
+  }
+
+  measure: Numerator_Shown1 {
+    label: "Numerator Shown1"
+    type: number
+    sql:
+
+      CASE {% parameter RIS_Type %}
+
+      WHEN 'Overall' then sum(${ris_num})
+      WHEN 'SU&G' THEN (
+              SUM(CASE
+                WHEN ${suag_sales_qty} > 0 AND ${is_eligible} = TRUE
+                THEN ${ris_num}
+                ELSE NULL
+              END)
+            )
+            WHEN 'Non SU&G' THEN (
+              SUM(CASE
+                WHEN (${suag_sales_qty} > 0 OR ${suag_sales_qty} IS NULL) AND ${is_eligible} = TRUE
+                THEN ${ris_num}
+                ELSE NULL
+              END)
+            )
+            ELSE NULL
+          END ;;
+}
+
+  measure: Denominator_Shown1 {
+    label: "Denominator Shown1"
+    type: number
+    sql:
+    CASE {% parameter RIS_Type %}
+
+      WHEN 'Overall' then sum(${ris_den})
+      WHEN 'SU&G' THEN (
+              SUM(CASE
+                WHEN ${suag_sales_qty} > 0 AND ${is_eligible} = TRUE
+                THEN ${ris_num}
+                ELSE NULL
+              END)
+            )
+            WHEN 'Non SU&G' THEN (
+              SUM(CASE
+                WHEN (${suag_sales_qty} > 0 OR ${suag_sales_qty} IS NULL) AND ${is_eligible} = TRUE
+                THEN ${ris_num}
+                ELSE NULL
+              END)
+            )
+            ELSE NULL
+          END ;;
+    value_format_name: decimal_3
+    }
+
+  measure: html_1 {
+    label: "HTML"
+    type: number
+    # SUM([RIS_NUM])/SUM([RIS_DEN])
+    sql: CAST(100.0 AS NUMERIC) ;;
+    html: {{calculation_990510463076048899._rendered_value}}<br>
+      {{calculation_990510463077076997._rendered_value}};;
+  }
+
+  measure: html_2 {
+    label: "HTML2"
+    type: number
+    # SUM([RIS_NUM])/SUM([RIS_DEN])
+    sql: CAST(100.0 AS NUMERIC) ;;
+    html:  <b>{{Suag_RIS._rendered_value}} </b><br>
+         {{Numerator_Shown1._rendered_value}}<br>
+         {{Denominator_Shown1._rendered_value}}
+      ;;
+  }
+
+  dimension: mva_num1 {
+    label: "MVA_Num1"
+    type: number
+    # IF  [SUAG_SALES_QTY] > 0 AND [IS_ELIGIBLE] = TRUE AND [REG_DT] = [PYMNT_DT]
+    # AND ([DEVICE_GROUPING] = 'C2212' or [DEVICE_GROUPING] = 'C3913') THEN [NET_SALES]
+    # ELSE 0 END
+    sql:
+    case when ${suag_sales_qty} > 0 AND ${is_eligible} = TRUE
+     AND (${device_grouping} = 'C2212' or ${device_grouping} = 'C3913') THEN ${net_sales}
+    ELSE 0 END ;;
+
+    # AND ${reg_dt} = ${pymnt_dt}
+  }
+
+dimension: mva_indicator1 {
+  type: string
+  sql: CASE WHEN ${mva_num1} > 0 THEN 'Y' ELSE 'N' END ;;
+}
+
+  dimension: sug_indicator1 {
+    type: string
+    sql: CASE WHEN ${suag_num} > 0 THEN 'Y' ELSE 'N' END ;;
+  }
 
 }
