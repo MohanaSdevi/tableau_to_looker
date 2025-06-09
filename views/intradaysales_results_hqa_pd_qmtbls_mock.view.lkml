@@ -145,7 +145,7 @@ view: intradaysales_results_hqa_pd_qmtbls_mock {
     type: string
     # IF [trans_type] = 'EUP' then "Upgrade" ELSE "New" END
     sql: CASE
-         WHEN ${trans_type} = 'EUP' THEN "Upgrade"
+         WHEN ${trans_type} = 'C7484' THEN "Upgrade"
          ELSE "New"
          END ;;
   }
