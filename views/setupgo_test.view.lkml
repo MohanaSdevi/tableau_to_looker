@@ -2207,28 +2207,28 @@ view: setupgo_test {
 
 ##### Changes
 
-  parameter: dynamic_3 {
-    type: string
-    default_value: "District"
-    allowed_value: { value: "Market" }
-    allowed_value: { value: "Territory" }
-    allowed_value: { value: "District" }
-    allowed_value: { value: "Zone" }
-    allowed_value: { value: "Outlet" }
-    allowed_value: { value: "Rep" }
-  }
+  # parameter: dynamic_3 {
+  #   type: string
+  #   default_value: "District"
+  #   allowed_value: { value: "Market" }
+  #   allowed_value: { value: "Territory" }
+  #   allowed_value: { value: "District" }
+  #   allowed_value: { value: "Zone" }
+  #   allowed_value: { value: "Outlet" }
+  #   allowed_value: { value: "Rep" }
+  # }
 
 
-  parameter: dynamic_4 {
-    type: string
-    default_value: "Outlet"
-    allowed_value: { value: "Market" }
-    allowed_value: { value: "Territory" }
-    allowed_value: { value: "District" }
-    allowed_value: { value: "Zone" }
-    allowed_value: { value: "Outlet" }
-    allowed_value: { value: "Rep" }
-  }
+  # parameter: dynamic_4 {
+  #   type: string
+  #   default_value: "Outlet"
+  #   allowed_value: { value: "Market" }
+  #   allowed_value: { value: "Territory" }
+  #   allowed_value: { value: "District" }
+  #   allowed_value: { value: "Zone" }
+  #   allowed_value: { value: "Outlet" }
+  #   allowed_value: { value: "Rep" }
+  # }
 
 
   parameter: RIS_Type{
@@ -2326,6 +2326,16 @@ view: setupgo_test {
          {{Denominator_Shown1._rendered_value}}
       ;;
   }
+ measure: html_3 {
+  label: "HTML3"
+  type: number
+  # SUM([RIS_NUM])/SUM([RIS_DEN])
+  sql: CAST(100.0 AS NUMERIC) ;;
+  html:  <b>{{suag_den._rendered_value}} </b><br>
+         {{suag_num__copy__452048844292403200._rendered_value}}<br>
+         {{calculation_978688514352406528._rendered_value}}
+      ;;
+}
 
   dimension: mva_num1 {
     label: "MVA_Num1"
