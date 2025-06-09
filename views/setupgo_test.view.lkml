@@ -421,6 +421,26 @@ view: setupgo_test {
   #   type: string
   #   sql: CAST('string' AS STRING) ;;
   # }
+  parameter: dynamic_3 {
+    type: string
+    default_value: "District"
+    allowed_value: { value: "Market" }
+    allowed_value: { value: "Territory" }
+    allowed_value: { value: "District" }
+    allowed_value: { value: "Zone" }
+    allowed_value: { value: "Outlet" }
+    allowed_value: { value: "Rep" }
+  }
+  parameter: dynamic_4 {
+    type: string
+    default_value: "Outlet"
+    allowed_value: { value: "Market" }
+    allowed_value: { value: "Territory" }
+    allowed_value: { value: "District" }
+    allowed_value: { value: "Zone" }
+    allowed_value: { value: "Outlet" }
+    allowed_value: { value: "Rep" }
+  }
 
   parameter: dynamic_2 {
     type: string
