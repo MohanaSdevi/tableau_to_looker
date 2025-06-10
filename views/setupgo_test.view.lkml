@@ -1524,15 +1524,15 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: selected_month_mva_den__copy__1028509586700419079 {
-    label: "Selected Month MVA Num"
-    type: number
-    # If DATEPART('month', [RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
-    # and datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
-    # then [MVA_Den (copy)_1365153658450157570]
-    # END
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
+  # dimension: selected_month_mva_den__copy__1028509586700419079 {
+  #   label: "Selected Month MVA Num"
+  #   type: number
+  #   # If DATEPART('month', [RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
+  #   # and datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
+  #   # then [MVA_Den (copy)_1365153658450157570]
+  #   # END
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
 
   dimension: selected_month_mva_num__copy__1028509586700484616 {
     label: "Selected Month MVA"
@@ -2362,15 +2362,7 @@ dimension: mva_indicator1 {
     type: string
     sql: FORMAT_TIMESTAMP('%B %Y', CAST(${rpt_mth} AS TIMESTAMP)) ;;
   }
-#-------------------------------------------------------------------------
-  # dimension: calculation_978688514360860676 {
-  #   label: "Selected Month Sales Test"
-  #   type: number
-  #   # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
-  #   # AND DATEPART('year',[RPT_MTH]) = [Parameters].[Parameter 1]
-  #   # Then [SUAG_NUM (copy)_452048844292403200] END
-  #   sql: CAST(100.0 AS NUMERIC) ;;
-  # }
+#---------------------------Aparna---------------------------------------
 
   dimension: rpt_mth11 {
     label: "RPT_MTH test"
@@ -2423,23 +2415,16 @@ dimension: mva_indicator1 {
     END ;;
   }
 
-  # dimension: suag_num__copy__4520488442924032001 {
-  #   label: "SUAG_NUM (new) test"
-  #   type: number
-  #   value_format: "0.0%"
-  #   # If ISNULL([SUAG_NUM]) then 0
-  #   # elseif [SUAG_ITEM_CD] = 'C3518' then [SUAG_NUM]
-  #   # ELSEIF [SUAG_ITEM_CD] =  'C65' then [SUAG_NUM]
-  #   # elseif [SUAG_ITEM_CD] = 'C5697' then [SUAG_NUM]
-  #   # END
-  #   sql: CASE WHEN ${suag_num} IS NULL then 0
-  #         WHEN ${suag_item_cd} = 'C3518' then ${suag_num}
-  #         WHEN ${suag_item_cd} =  'C65' then ${suag_num}
-  #         WHEN ${suag_item_cd} = 'C5697' then ${suag_num}
-  #         END ;;
-  # }
+  dimension: selected_month_mva_den__copy__1028509586700419079 {
+    label: "Selected Month MVA Num"
+    type: number
+    sql: CASE
+      WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64)
+        AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
+      THEN ${mva_num1}
+      ELSE NULL
+    END ;;
 
-  #suag_num__copy__452048844292403200
-
+    }
 
 }
