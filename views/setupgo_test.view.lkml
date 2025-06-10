@@ -1544,15 +1544,6 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: selected_month_sales__copy__978688514362118151 {
-    label: "Previous Month Sales"
-    type: number
-    # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693] - 1
-    # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
-    # Then [SUAG_NUM (copy)_452048844292403200] END
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
   dimension: selected_month_sales__copy__978688514362888201 {
     label: "Selected Month Take Rate"
     type: number
@@ -2016,7 +2007,7 @@ view: setupgo_test {
   }
   measure: sum_selected_month_sales__copy__978688514362118151_qk {
     label: "Previous Month Sales"
-    type: sum
+    type: number
     sql: ${selected_month_sales__copy__978688514362118151} ;;
   }
   dimension: usr_calculation_97179246491127808_nk {
@@ -2433,6 +2424,27 @@ dimension: mva_indicator1 {
     sql: SAFE_DIVIDE(SUM(${selected_month_mva_den__copy__1028509586700419079}),SUM(${mva_den__copy__1028509586700185606} ));;
     # sql: CAST(100.0 AS NUMERIC) ;;
   }
+
+ measure: selected_month_sales__copy__978688514362118151 {
+    label: "Previous Month Sales test"
+    type: sum
+    sql:
+    CASE
+      WHEN (
+        (EXTRACT(MONTH FROM ${rpt_mth11}) = 12 AND CAST({% parameter selected_month %} AS INT64) = 1
+         AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64) - 1)
+        OR
+        (EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64) - 1
+         AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64))
+      )
+      THEN ${suag_num__copy__452048844292403200}
+      ELSE 0
+    END ;;
+    # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693] - 1
+    # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
+    # Then [SUAG_NUM (copy)_452048844292403200] END
+  }
+
 
   dimension: _difference_sales__copy__1202461143577034778 {
     label: "difference in sales"
