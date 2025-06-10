@@ -2497,16 +2497,29 @@ dimension: mva_indicator1 {
   #   sql: CAST(100.0 AS NUMERIC) ;;
   # }
 
+  # measure: previous_month_mva_den__copy__1028509586701422602 {
+  #   label: "Previous Month MVA Num"
+  #   type: sum
+  #   sql: CASE
+  #     WHEN (
+  #       (EXTRACT(MONTH FROM ${rpt_mth11}) =  CAST({% parameter selected_month %} AS INT64) - 1
+  #       AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64))
+  #         THEN ${mva_den__copy__1365153658450157570}
+  #         ELSE 0
+  #         END ;;
+  # }
+
   measure: previous_month_mva_den__copy__1028509586701422602 {
-    label: "Previous Month MVANum"
-    type: number
+    label: "Previous Month MVA Num"
+    type: sum
     sql: CASE
-          WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64) - 1
-          AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
+          WHEN EXTRACT(MONTH FROM DATE(${rpt_mth11})) = CAST({% parameter selected_month %} AS INT64) - 1
+            AND EXTRACT(YEAR FROM DATE(${rpt_mth11})) = CAST({% parameter year %} AS INT64)
           THEN ${mva_den__copy__1365153658450157570}
           ELSE 0
-          END ;;
+        END ;;
   }
+
 
   # dimension: previous_month_tr_den__copy__1028509586701238281 {
   #   label: "Previous Month MVA Den"
@@ -2545,9 +2558,8 @@ dimension: mva_indicator1 {
     label: "MVA_Num"
     type: number
     sql: CASE
-         WHEN ${suag_sales_qty} > 0
-           AND ${is_eligible} = TRUE
-           AND DATE(${reg_dt}) = DATE(${pymnt_dt})
+         WHEN ${suag_sales_qty} > 0 AND ${is_eligible} = TRUE
+           AND ${reg_dt} = ${pymnt_dt}
            AND (${device_grouping} = 'C2212' or ${device_grouping} = 'C3913') THEN ${net_sales}
          ELSE 0
        END ;;
