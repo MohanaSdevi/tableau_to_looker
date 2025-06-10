@@ -1092,15 +1092,6 @@ view: setupgo_test {
 
   # *****************************************JN********************************************
 
-  dimension: calculation_978688514360860676 {
-    label: "Selected Month Sales"
-    type: number
-    # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
-    # AND DATEPART('year',[RPT_MTH]) = [Parameters].[Parameter 1]
-    # Then [SUAG_NUM (copy)_452048844292403200] END
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
   dimension: calculation_978688514400440337 {
     label: "Selected Month TR Num"
     type: number
@@ -2029,7 +2020,7 @@ view: setupgo_test {
   }
   measure: sum_calculation_978688514360860676_qk {
     label: "Selected Month Sales"
-    type: sum
+    type: number
     sql: ${calculation_978688514360860676} ;;
   }
   dimension: usr__difference_sales__copy__1202461143577034778_qk {
@@ -2326,16 +2317,15 @@ view: setupgo_test {
          {{Denominator_Shown1._rendered_value}}
       ;;
   }
- measure: html_3 {
-  label: "HTML3"
-  type: number
-  # SUM([RIS_NUM])/SUM([RIS_DEN])
-  sql: CAST(100.0 AS NUMERIC) ;;
-  html:  <b>{{suag_den._rendered_value}} </b><br>
-         {{suag_num__copy__452048844292403200._rendered_value}}<br>
+  measure: html_3 {
+    label: "HTML3"
+    type: number
+    sql: CAST(100.0 AS NUMERIC) ;;
+    html:  <b>{{suag_num__copy__452048844292403200._rendered_value}}</b><br>
+         {{suag_den._rendered_value}}<br>
          {{calculation_978688514352406528._rendered_value}}
-      ;;
-}
+  ;;
+  }
 
   dimension: mva_num1 {
     label: "MVA_Num1"
@@ -2372,7 +2362,84 @@ dimension: mva_indicator1 {
     type: string
     sql: FORMAT_TIMESTAMP('%B %Y', CAST(${rpt_mth} AS TIMESTAMP)) ;;
   }
+#-------------------------------------------------------------------------
+  # dimension: calculation_978688514360860676 {
+  #   label: "Selected Month Sales Test"
+  #   type: number
+  #   # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
+  #   # AND DATEPART('year',[RPT_MTH]) = [Parameters].[Parameter 1]
+  #   # Then [SUAG_NUM (copy)_452048844292403200] END
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
 
+  dimension: rpt_mth11 {
+    label: "RPT_MTH test"
+    type: date
+    sql: CAST(${TABLE}.RPT_MTH AS DATE) ;;
+  }
+
+  parameter: year {
+    type: number
+    allowed_value: {
+      label: "2022"
+      value: "2022"
+    }
+    allowed_value: {
+      label: "2023"
+      value: "2023"
+    }
+    allowed_value: {
+      label: "2024"
+      value: "2024"
+    }
+    default_value: "2024"
+  }
+
+  parameter: selected_month {
+    type: string
+    allowed_value: { label: "January"   value: "1" }
+    allowed_value: { label: "February"  value: "2" }
+    allowed_value: { label: "March"     value: "3" }
+    allowed_value: { label: "April"     value: "4" }
+    allowed_value: { label: "May"       value: "5" }
+    allowed_value: { label: "June"      value: "6" }
+    allowed_value: { label: "July"      value: "7" }
+    allowed_value: { label: "August"    value: "8" }
+    allowed_value: { label: "September" value: "9" }
+    allowed_value: { label: "October"   value: "10" }
+    allowed_value: { label: "November"  value: "11" }
+    allowed_value: { label: "December"  value: "12" }
+    default_value: "4"  # April
+  }
+
+  measure: calculation_978688514360860676 {
+    label: "Selected Month Sales"
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64)
+       AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
+       then ${suag_num__copy__452048844292403200} else 0
+    END ;;
+  }
+
+  # dimension: suag_num__copy__4520488442924032001 {
+  #   label: "SUAG_NUM (new) test"
+  #   type: number
+  #   value_format: "0.0%"
+  #   # If ISNULL([SUAG_NUM]) then 0
+  #   # elseif [SUAG_ITEM_CD] = 'C3518' then [SUAG_NUM]
+  #   # ELSEIF [SUAG_ITEM_CD] =  'C65' then [SUAG_NUM]
+  #   # elseif [SUAG_ITEM_CD] = 'C5697' then [SUAG_NUM]
+  #   # END
+  #   sql: CASE WHEN ${suag_num} IS NULL then 0
+  #         WHEN ${suag_item_cd} = 'C3518' then ${suag_num}
+  #         WHEN ${suag_item_cd} =  'C65' then ${suag_num}
+  #         WHEN ${suag_item_cd} = 'C5697' then ${suag_num}
+  #         END ;;
+  # }
+
+  #suag_num__copy__452048844292403200
 
 
 }
