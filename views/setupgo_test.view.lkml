@@ -747,13 +747,6 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: _difference_sales__copy__1202461143577034778 {
-    label: "difference in sales"
-    type: number
-    # (SUM([Calculation_978688514360860676])-SUM([Selected Month Sales (copy)_978688514362118151]))
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
   dimension: _difference_sales__copy__1349391106598633506 {
     label: "%difference TR"
     type: number
@@ -777,14 +770,14 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: calculation_1365153658448224257 {
-    label: "MVA_Den"
-    type: number
-    # IF  [SUAG_SALES_QTY] > 0 AND [IS_ELIGIBLE] = TRUE AND ([REG_DT] >= [PYMNT_DT] OR ISNULL([REG_DT]))
-    # AND ([DEVICE_GROUPING] = 'C2212' or [DEVICE_GROUPING] = 'C3913') THEN [NET_SALES]
-    # ELSE 0 END
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
+  # dimension: calculation_1365153658448224257 {
+  #   label: "MVA_Den"
+  #   type: number
+  #   # IF  [SUAG_SALES_QTY] > 0 AND [IS_ELIGIBLE] = TRUE AND ([REG_DT] >= [PYMNT_DT] OR ISNULL([REG_DT]))
+  #   # AND ([DEVICE_GROUPING] = 'C2212' or [DEVICE_GROUPING] = 'C3913') THEN [NET_SALES]
+  #   # ELSE 0 END
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
 
   dimension: calculation_1573726602467061764 {
     label: "Is Current Month"
@@ -1294,15 +1287,15 @@ view: setupgo_test {
     sql: SAFE_DIVIDE(SUM(${calculation_1664924554371538944}),SUM(${su_g_single__copy__788692951555624961}));;
   }
 
-  dimension: mva_den__copy__1028509586700185606 {
-    label: "Selected Month MVA Den"
-    type: number
-    # If DATEPART('month', [RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
-    # and datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
-    # then [Calculation_1365153658448224257]
-    # END
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
+  # dimension: mva_den__copy__1028509586700185606 {
+  #   label: "Selected Month MVA Den"
+  #   type: number
+  #   # If DATEPART('month', [RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
+  #   # and datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
+  #   # then [Calculation_1365153658448224257]
+  #   # END
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
 
 
 
@@ -1534,12 +1527,12 @@ view: setupgo_test {
   #   sql: CAST(100.0 AS NUMERIC) ;;
   # }
 
-  dimension: selected_month_mva_num__copy__1028509586700484616 {
-    label: "Selected Month MVA"
-    type: number
-    # SUM([Selected Month MVA Den (copy)_1028509586700419079]) / SUM([MVA_Den (copy)_1028509586700185606])
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
+  # dimension: selected_month_mva_num__copy__1028509586700484616 {
+  #   label: "Selected Month MVA"
+  #   type: number
+  #   # SUM([Selected Month MVA Den (copy)_1028509586700419079]) / SUM([MVA_Den (copy)_1028509586700185606])
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
 
   dimension: selected_month_num__copy__978688514400788498 {
     label: "Selected Month TR Den"
@@ -1998,7 +1991,7 @@ view: setupgo_test {
     type: sum
     sql: ${calculation_681732406204973062} ;;
   }
-  dimension: usr_selected_month_mva_num__copy__1028509586700484616_qk {
+  measure: usr_selected_month_mva_num__copy__1028509586700484616_qk {
     label: "Selected Month MVA"
     type: number
     sql: ${selected_month_mva_num__copy__1028509586700484616} ;;
@@ -2426,5 +2419,49 @@ dimension: mva_indicator1 {
     END ;;
 
     }
+
+  dimension: calculation_1365153658448224257 {
+    label: "MVA_Den"
+    type: number
+    sql: case when
+          ${suag_sales_qty} > 0 AND ${is_eligible} = TRUE
+          AND (${device_grouping} = 'C2212' or ${device_grouping} = 'C3913') THEN ${net_sales}
+          ELSE 0 END ;;
+          # IF  [SUAG_SALES_QTY] > 0 AND [IS_ELIGIBLE] = TRUE AND ([REG_DT] >= [PYMNT_DT] OR ISNULL([REG_DT]))
+          # AND ([DEVICE_GROUPING] = 'C2212' or [DEVICE_GROUPING] = 'C3913') THEN [NET_SALES]
+          # ELSE 0 END
+          # sql: CAST(100.0 AS NUMERIC) ;;
+    }
+
+  dimension: mva_den__copy__1028509586700185606 {
+    label: "Selected Month MVA Den"
+    type: number
+    sql: CASE
+          WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64)
+          AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
+          THEN ${calculation_1365153658448224257}
+          ELSE NULL
+          END ;;
+          # If DATEPART('month', [RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
+          # and datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
+          # then [Calculation_1365153658448224257]
+          # END
+          # sql: CAST(100.0 AS NUMERIC) ;;
+    }
+
+  measure: selected_month_mva_num__copy__1028509586700484616 {
+    label: "Selected Month MVA"
+    type: number
+    # SUM([Selected Month MVA Den (copy)_1028509586700419079]) / SUM([MVA_Den (copy)_1028509586700185606])
+    sql: SAFE_DIVIDE(SUM(${selected_month_mva_den__copy__1028509586700419079}),SUM(${mva_den__copy__1028509586700185606} ));;
+    # sql: CAST(100.0 AS NUMERIC) ;;
+  }
+
+  dimension: _difference_sales__copy__1202461143577034778 {
+    label: "difference in sales"
+    type: number
+    # (SUM([Calculation_978688514360860676])-SUM([Selected Month Sales (copy)_978688514362118151]))
+    sql: CAST(100.0 AS NUMERIC) ;;
+  }
 
 }
