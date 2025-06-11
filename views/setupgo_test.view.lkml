@@ -2493,36 +2493,18 @@ dimension: mva_indicator1 {
        END ;;
   }
 
-  dimension: calculation_978688514400440337 {
-    label: "Selected Month TR Num"
-    type: number
-    # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
-    # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
-    # then [SUAG_NUM (copy)_452048844292403200] else null end
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
-  dimension: selected_month_num__copy__978688514400788498 {
-    label: "Selected Month TR Den"
-    type: number
-    # FLOAT(If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
-    # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
-    # then [SUAG_DEN] else null end)
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
  #---------------------------Aparna---------------------------------------
 
  measure: selected_month_sales__copy__978688514362888201 {
     label: "Selected Month Take Rate"
     type: number
     # SUM([Calculation_978688514400440337]) / SUM([Selected Month Num (copy)_978688514400788498])
-    sql: ${calculation_978688514400440337_ap} / NULLIF(${selected_month_num__copy__978688514400788498_ap}, 0);;
+    sql: ${calculation_978688514400440337} / NULLIF(${selected_month_num__copy__978688514400788498}, 0);;
     value_format_name: "percent_2"
   }
 
-  measure: calculation_978688514400440337_ap{
-    label: "Selected Month TR Num test ap"
+  measure: calculation_978688514400440337{
+    label: "Selected Month TR Num"
     type: sum
     # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
     # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
@@ -2534,8 +2516,8 @@ dimension: mva_indicator1 {
   ELSE NULL END ;;
   }
 
-  measure: selected_month_num__copy__978688514400788498_ap {
-    label: "Selected Month TR Den test ap"
+  measure: selected_month_num__copy__978688514400788498 {
+    label: "Selected Month TR Den"
     type: sum
     # FLOAT(If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
     # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
