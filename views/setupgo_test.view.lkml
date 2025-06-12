@@ -1482,15 +1482,6 @@ view: setupgo_test {
     sql: CAST('string' AS STRING) ;;
   }
 
-  dimension: selected_month_den__copy__978688514401103891 {
-    label: "Previous Month TR Den"
-    type: number
-    # FLOAT(If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693] -1
-    # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
-    # then [SUAG_DEN] else null end)
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
   # dimension: selected_month_mva_den__copy__1028509586700419079 {
   #   label: "Selected Month MVA Num"
   #   type: number
@@ -1508,29 +1499,12 @@ view: setupgo_test {
   #   sql: CAST(100.0 AS NUMERIC) ;;
   # }
 
-
-  dimension: selected_month_num__copy__978688514401112084 {
-    label: "Previous Month TR Num"
-    type: number
-    # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693] -1
-    # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
-    # then [SUAG_NUM (copy)_452048844292403200] else null end
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
   dimension: selected_month_sales__copy__388435489347289112 {
     label: "Selected Month Sales (Denominator)"
     type: number
     # If DATEPART('month',[RPT_MTH]) = [Parameters].[Current Month (copy)_978688514361458693]
     # AND Datepart('year', [RPT_MTH]) = [Parameters].[Parameter 1]
     #  Then [SUAG_DEN] END
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
-
-  dimension: selected_month_take_rate__copy__978688514363285514 {
-    label: "Previous Month Take Rate"
-    type: number
-    # SUM([Selected Month Num (copy)_978688514401112084]) / SUM([Selected Month Den (copy)_978688514401103891])
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
@@ -2005,11 +1979,13 @@ view: setupgo_test {
     label: "Selected Month Take Rate"
     type: number
     sql: ${selected_month_sales__copy__978688514362888201} ;;
+    value_format_name: percent_2
   }
-  dimension: usr_selected_month_take_rate__copy__978688514363285514_qk {
+  measure: usr_selected_month_take_rate__copy__978688514363285514_qk {
     label: "Previous Month Take Rate"
     type: number
     sql: ${selected_month_take_rate__copy__978688514363285514} ;;
+    value_format_name: percent_2
   }
   measure: sum_selected_month_sales__copy__388435489347289112_qk {
     label: "Selected Month Sales (Denominator)"
@@ -2529,5 +2505,38 @@ dimension: mva_indicator1 {
   ELSE NULL END ;;
   }
 
+
+
+  measure: selected_month_num__copy__978688514401112084 {
+    label: "Previous Month TR Num"
+    type: sum
+    sql: CASE
+  WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64) - 1
+        AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
+      THEN ${suag_num__copy__452048844292403200}
+
+      ELSE NULL
+    END ;;
+  }
+
+  measure: selected_month_den__copy__978688514401103891 {
+    label: "Previous Month TR Den"
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64) - 1
+      AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
+      THEN ${suag_den}
+      ELSE NULL
+      END ;;
+  }
+
+  # ---notworking---
+  measure: selected_month_take_rate__copy__978688514363285514 {
+    label: "Previous Month Take Rate"
+    type: number
+    sql: ${calculation_978688514400440337} / NULLIF (${selected_month_num__copy__978688514400788498}, 0);;
+    value_format_name: "percent_2"
+    }
 
 }
