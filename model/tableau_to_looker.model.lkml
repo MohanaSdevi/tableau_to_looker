@@ -15,3 +15,6 @@ explore: cstatsdynamicscorecard_mock {}
 explore: channeloutlier {}
 explore: setupgo_test {}
 explore: testdna {}
+explore: setupgo_top_bottom {}
+explore: ranked_data {}
+explore: ranked_data_1 {}

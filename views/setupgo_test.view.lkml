@@ -2342,6 +2342,25 @@ dimension: mva_indicator1 {
     type: string
     sql: FORMAT_TIMESTAMP('%B %Y', CAST(${rpt_mth} AS TIMESTAMP)) ;;
   }
+  measure: row_number {
+    type: number
+    sql: ROW_NUMBER() OVER () ;;
+  }
+
+  measure: total_rows {
+    type: number
+    sql: COUNT(*) OVER () ;;
+  }
+  measure: row_label {
+    type: string
+    sql:
+    CASE
+      WHEN ${row_number} < 6 THEN 'top 5'
+      WHEN (${total_rows} - ${row_number}) < 5 THEN 'bottom 5'
+      ELSE 'others'
+    END ;;
+  }
+
 
 
 
