@@ -12,7 +12,7 @@ view: setupgo_test {
   dimension: pymnt_dt {
     label: "PYMNT_DT"
     type: date_raw
-    sql: CAST(${TABLE}.PYMNT_DT AS DATE) ;;
+    sql: CAST(${TABLE}.PYMNT_DT AS TIMESTAMP) ;;
   }
 
   dimension: sls_outlet_id {
