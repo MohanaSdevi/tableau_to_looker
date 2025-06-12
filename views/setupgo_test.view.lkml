@@ -747,12 +747,12 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: _difference_sales__copy__1349391106598633506 {
-    label: "%difference TR"
-    type: number
-    # [Selected Month Sales (copy)_978688514362888201]/[Selected Month Take Rate (copy)_978688514363285514]-1
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
+  # dimension: _difference_sales__copy__1349391106598633506 {
+  #   label: "%difference TR"
+  #   type: number
+  #   # [Selected Month Sales (copy)_978688514362888201]/[Selected Month Take Rate (copy)_978688514363285514]-1
+  #   sql: CAST(100.0 AS NUMERIC) ;;
+  # }
 
   dimension: calculation_1307169799376728065 {
     label: "AARD"
@@ -2565,7 +2565,6 @@ dimension: mva_indicator1 {
       END ;;
   }
 
-  # ---notworking---
   measure: selected_month_take_rate__copy__978688514363285514 {
     label: "Previous Month Take Rate"
     type: number
@@ -2588,6 +2587,18 @@ dimension: mva_indicator1 {
 
       ELSE NULL
       END ;;
+  }
+
+  measure: _difference_sales__copy__1349391106598633506 {
+    label: "%difference TR"
+    type: number
+    sql:
+    CASE
+      WHEN ${selected_month_take_rate__copy__978688514363285514} != 0
+      THEN (${selected_month_sales__copy__978688514362888201} / ${selected_month_take_rate__copy__978688514363285514}) - 1
+      ELSE NULL
+    END ;;
+    value_format_name: "percent_2"
   }
 
 
