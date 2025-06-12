@@ -2403,26 +2403,68 @@ dimension: mva_indicator1 {
   }
 
 
-  measure: usr_calculation_97179246492164099_qk {
+  # measure: usr_calculation_97179246492164099_qk {
+  #   label: "% DIFF MVA 1"
+  #   type: number
+  #   sql: ${calculation_97179246492164099};;
+  #   value_format: "0.0%"
+  # }
+  # measure: calculation_97179246492164099 {
+  #   label: "% DIFF MVA 1 test"
+  #   type: number
+  #   sql: (${selected_month_mva_num__copy__1028509586700484616} / NULLIF( ${previous_month_mvanum__copy__1028509586701479947},0))-1;;
+  #   # [Selected Month MVA Num (copy)_1028509586700484616]/[Previous Month MVANum (copy)_1028509586701479947]-1
+  #   # sql: CAST(100.0 AS NUMERIC) ;;
+  #   # value_format: "0%"
+  # }
+
+  measure: selected_month_mva_1 {
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM DATE(${rpt_mth})) = CAST({% parameter selected_month %} AS INT64)
+        AND EXTRACT(YEAR FROM DATE(${rpt_mth})) = CAST({% parameter year %} AS INT64)
+        AND ${suag_sales_qty} > 0
+        AND ${is_eligible} = TRUE
+        AND (${device_grouping} = 'C2212' OR ${device_grouping} = 'C3913')
+      THEN ${net_sales}
+      ELSE 0
+    END ;;
+  }
+
+  measure: previous_month_mva_1 {
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM DATE(${rpt_mth})) = CAST({% parameter selected_month %} AS INT64) - 1
+        AND EXTRACT(YEAR FROM DATE(${rpt_mth})) = CAST({% parameter year %} AS INT64)
+        AND ${suag_sales_qty} > 0
+        AND ${is_eligible} = TRUE
+        AND (${device_grouping} = 'C2212' OR ${device_grouping} = 'C3913')
+      THEN ${net_sales}
+      ELSE 0
+    END ;;
+  }
+
+  measure: mva_percent_change {
     label: "% DIFF MVA 1"
     type: number
-    sql: ${calculation_97179246492164099} ;;
+    sql:
+    CASE
+      WHEN ${selected_month_mva_1} = 0 OR ${previous_month_mva_1} = 0 THEN 0
+      ELSE SAFE_DIVIDE(${selected_month_mva_1} - ${previous_month_mva_1}, NULLIF(${previous_month_mva_1}, 0))
+    END ;;
+    value_format: "0.0%"
   }
-  measure: calculation_97179246492164099 {
-    label: "% DIFF MVA 1 test"
-    type: number
-    sql: (${selected_month_mva_num__copy__1028509586700484616} / NULLIF( ${previous_month_mvanum__copy__1028509586701479947},0))-1;;
-    # [Selected Month MVA Num (copy)_1028509586700484616]/[Previous Month MVANum (copy)_1028509586701479947]-1
-    # sql: CAST(100.0 AS NUMERIC) ;;
-    value_format: "0%"
-  }
+
+
 
   measure: previous_month_mvanum__copy__1028509586701479947 {
     label: "Previous Month MVA"
     type: number
-    sql: sum(${previous_month_mva_den__copy__1028509586701422602}/SUM(${previous_month_tr_den__copy__1028509586701238281}) ;;
+    sql: ${previous_month_mva_den__copy__1028509586701422602}/ NULLIF(${previous_month_tr_den__copy__1028509586701238281}, 0) ;;
   }
-
+  # ${calculation_978688514400440337} / NULLIF (${selected_month_num__copy__978688514400788498}, 0)
   measure: previous_month_mva_den__copy__1028509586701422602 {
     label: "Previous Month MVA Num"
     type: sum
@@ -2463,8 +2505,8 @@ dimension: mva_indicator1 {
     type: number
     sql: CASE
          WHEN ${suag_sales_qty} > 0 AND ${is_eligible} = TRUE
-           AND ${reg_dt} = ${pymnt_dt}
-           AND (${device_grouping} = 'C2212' or ${device_grouping} = 'C3913') THEN ${net_sales}
+           AND ${reg_dt} = DATE(${pymnt_dt})
+           AND (${device_grouping} = 'C2212' OR ${device_grouping} = 'C3913') THEN ${net_sales}
          ELSE 0
        END ;;
   }
