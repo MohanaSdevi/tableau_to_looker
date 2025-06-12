@@ -2547,28 +2547,20 @@ dimension: mva_indicator1 {
   ELSE NULL END ;;
   }
 
-
-
   measure: selected_month_num__copy__978688514401112084 {
     label: "Previous Month TR Num"
     type: sum
-    sql: CASE
-  WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64) - 1
-        AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
-      THEN ${suag_num__copy__452048844292403200}
-
-      ELSE NULL
-    END ;;
-  }
-
-  measure: selected_month_den__copy__978688514401103891 {
-    label: "Previous Month TR Den"
-    type: sum
     sql:
     CASE
+      WHEN CAST({% parameter selected_month %} AS INT64) = 1
+        AND EXTRACT(MONTH FROM ${rpt_mth11}) = 12
+        AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64) - 1
+      THEN ${suag_num__copy__452048844292403200}
+
       WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64) - 1
       AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
-      THEN ${suag_den}
+      THEN ${suag_num__copy__452048844292403200}
+
       ELSE NULL
       END ;;
   }
@@ -2577,8 +2569,26 @@ dimension: mva_indicator1 {
   measure: selected_month_take_rate__copy__978688514363285514 {
     label: "Previous Month Take Rate"
     type: number
-    sql: ${calculation_978688514400440337} / NULLIF (${selected_month_num__copy__978688514400788498}, 0);;
+    sql: ${selected_month_num__copy__978688514401112084} / NULLIF (${selected_month_den__copy__978688514401103891}, 0);;
     value_format_name: "percent_2"
     }
+
+  measure: selected_month_den__copy__978688514401103891 {
+    label: "Previous Month TR Den"
+    type: sum
+    sql:
+    CASE
+      WHEN CAST({% parameter selected_month %} AS INT64) = 1
+        AND EXTRACT(MONTH FROM ${rpt_mth11}) = 12
+        AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64) - 1
+      THEN ${suag_den}
+      WHEN EXTRACT(MONTH FROM ${rpt_mth11}) = CAST({% parameter selected_month %} AS INT64) - 1
+      AND EXTRACT(YEAR FROM ${rpt_mth11}) = CAST({% parameter year %} AS INT64)
+      THEN ${suag_den}
+
+      ELSE NULL
+      END ;;
+  }
+
 
 }
