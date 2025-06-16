@@ -1093,12 +1093,6 @@ view: setupgo_test {
     sql: ${calculation_990510463076048899}/${ris_num_suag__copy__990510463076642820} ;;
   }
 
-  dimension: current_month__copy__1349391106544603151 {
-    label: "Previous Month"
-    type: number
-    # [Calculation_1349391106544529422] - 1
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
 
   dimension: device_grouping__group__1 {
     label: "Device Group"
@@ -1863,14 +1857,6 @@ view: setupgo_test {
   #   sql: ${numerator_shown__copy__452048844326088711} ;;
   # }
 
-
-
-
-  dimension: none_current_month__copy__1349391106544603151_ok {
-    label: "Previous Month"
-    type: number
-    sql: ${current_month__copy__1349391106544603151} ;;
-  }
   dimension: usr_calculation_1349391106544181258_qk {
     label: "MIN(0)"
     type: number
@@ -1886,10 +1872,6 @@ view: setupgo_test {
     type: string
     sql: ${calculation_97179246491734018} ;;
   }
-
-
-
-
 
   dimension: usr_difference_in_tr__copy__978688514421264420_qk {
     label: "difference in MVA"
@@ -2595,17 +2577,20 @@ dimension: mva_indicator1 {
     default_value: "0"  # April
   }
 
-  dimension: none_calculation_1349391106544529422_ok {
-    label: "Current Month"
+# *****************************************************************************
+
+  dimension: previous_month {
     type: number
-    sql: ${calculation_1349391106544529422} ;;
+    sql: EXTRACT(MONTH FROM DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH)) ;;
   }
 
-  dimension: calculation_1349391106544529422 {
-    label: "Current Month Test"
+
+  dimension: current_month_number {
     type: number
-    # [Parameters].[Parameter 4]
-    sql: CAST({% parameter current_month %}AS INT64) ;;
+    sql: EXTRACT(MONTH FROM CURRENT_DATE()) ;;
   }
+
+  # *****************************************************************************
+
 
 }
