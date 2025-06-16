@@ -1913,7 +1913,7 @@ view: setupgo_test {
     type: number
     sql: ${calculation_978688514360860676} ;;
   }
-  dimension: usr__difference_sales__copy__1202461143577034778_qk {
+  measure: usr__difference_sales__copy__1202461143577034778_qk {
     label: "difference in sales"
     type: number
     sql: ${_difference_sales__copy__1202461143577034778} ;;
@@ -2350,13 +2350,6 @@ dimension: mva_indicator1 {
     # Then [SUAG_NUM (copy)_452048844292403200] END
   }
 
-
-  dimension: _difference_sales__copy__1202461143577034778 {
-    label: "difference in sales"
-    type: number
-    # (SUM([Calculation_978688514360860676])-SUM([Selected Month Sales (copy)_978688514362118151]))
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
 # **************************************************************************
 # ********************************************************************************
   dimension: calculation_97179246491734018 {
@@ -2592,5 +2585,56 @@ dimension: mva_indicator1 {
 
   # *****************************************************************************
 
+# *********************************************************************************
+
+  measure: selected_month_sales {
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM DATE(${rpt_mth11})) = {% parameter selected_month %}
+       AND EXTRACT(YEAR FROM DATE(${rpt_mth11})) = {% parameter selected_year %}
+      THEN ${suag_den}
+      ELSE 0
+    END ;;
+  }
+
+  measure: previous_month_sales {
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM DATE(${rpt_mth11})) =
+            CASE WHEN {% parameter selected_month %} = 1 THEN 12 ELSE {% parameter selected_month %} - 1 END
+       AND EXTRACT(YEAR FROM DATE(${rpt_mth11})) =
+            CASE WHEN {% parameter selected_month %} = 1 THEN {% parameter selected_year %} - 1 ELSE {% parameter selected_year %} END
+      THEN ${suag_den}
+      ELSE 0
+    END ;;
+  }
+
+  measure: sales_growth_percentage {
+    type: number
+    value_format_name: percent_2
+    sql:
+    CASE
+      WHEN ${previous_month_sales} != 0 THEN
+        (${selected_month_sales} / ${previous_month_sales}) - 1
+      ELSE NULL
+    END ;;
+  }
+
+  # measure: difference_in_sales {
+  #   label: "Difference in Sales (Test)"
+  #   type: number
+  #   sql: SAFE_DIVIDE(${previous_month_sales} - ${selected_month_sales}, ${selected_month_sales}) ;;
+  #   value_format_name: percent_2
+  # }
+
+  measure:_difference_sales__copy__1202461143577034778 {
+    label: "difference in sales test"
+    type: number
+    sql: SAFE_DIVIDE(SUM(${calculation_978688514360860676}),SUM(${selected_month_sales__copy__978688514362118151} )) ;;
+    # (SUM([Calculation_978688514360860676])-SUM([Selected Month Sales (copy)_978688514362118151]))
+    # sql: CAST(100.0 AS NUMERIC) ;;
+  }
 
 }
