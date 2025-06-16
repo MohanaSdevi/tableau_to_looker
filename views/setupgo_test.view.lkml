@@ -763,12 +763,7 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: calculation_1349391106544529422 {
-    label: "Current Month"
-    type: number
-    # [Parameters].[Parameter 4]
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
+
 
   # dimension: calculation_1365153658448224257 {
   #   label: "MVA_Den"
@@ -1867,11 +1862,7 @@ view: setupgo_test {
   #   type: number
   #   sql: ${numerator_shown__copy__452048844326088711} ;;
   # }
-  dimension: none_calculation_1349391106544529422_ok {
-    label: "Current Month"
-    type: number
-    sql: ${calculation_1349391106544529422} ;;
-  }
+
 
 
 
@@ -2077,16 +2068,6 @@ view: setupgo_test {
     type: sum
     sql: ${net_sales} ;;
   }
-
-  # parameter: date_level_selector {
-  #   type: string
-  #   default_value: "Day"
-  #   allowed_value: { value: "Day" }
-  #   allowed_value: { value: "Week" }
-  #   allowed_value: { value: "Month" }
-  #   allowed_value: { value: "Quater" }
-  #   allowed_value: { value: "Year" }
-  # }
 
 
   parameter: date_level_selector {
@@ -2603,5 +2584,28 @@ dimension: mva_indicator1 {
     value_format_name: "percent_2"
   }
 
+  parameter: current_month {
+    type: string
+    allowed_value: { label: "January"   value: "1" }
+    allowed_value: { label: "February"  value: "2" }
+    allowed_value: { label: "March"     value: "3" }
+    allowed_value: { label: "April"     value: "4" }
+    allowed_value: { label: "May"       value: "5" }
+    allowed_value: { label: "December"  value: "0" }
+    default_value: "0"  # April
+  }
+
+  dimension: none_calculation_1349391106544529422_ok {
+    label: "Current Month"
+    type: number
+    sql: ${calculation_1349391106544529422} ;;
+  }
+
+  dimension: calculation_1349391106544529422 {
+    label: "Current Month Test"
+    type: number
+    # [Parameters].[Parameter 4]
+    sql: CAST({% parameter current_month %}AS INT64) ;;
+  }
 
 }
