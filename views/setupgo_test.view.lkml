@@ -763,12 +763,7 @@ view: setupgo_test {
     sql: CAST(100.0 AS NUMERIC) ;;
   }
 
-  dimension: calculation_1349391106544529422 {
-    label: "Current Month"
-    type: number
-    # [Parameters].[Parameter 4]
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
+
 
   # dimension: calculation_1365153658448224257 {
   #   label: "MVA_Den"
@@ -1098,12 +1093,6 @@ view: setupgo_test {
     sql: ${calculation_990510463076048899}/${ris_num_suag__copy__990510463076642820} ;;
   }
 
-  dimension: current_month__copy__1349391106544603151 {
-    label: "Previous Month"
-    type: number
-    # [Calculation_1349391106544529422] - 1
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
 
   dimension: device_grouping__group__1 {
     label: "Device Group"
@@ -1867,19 +1856,7 @@ view: setupgo_test {
   #   type: number
   #   sql: ${numerator_shown__copy__452048844326088711} ;;
   # }
-  dimension: none_calculation_1349391106544529422_ok {
-    label: "Current Month"
-    type: number
-    sql: ${calculation_1349391106544529422} ;;
-  }
 
-
-
-  dimension: none_current_month__copy__1349391106544603151_ok {
-    label: "Previous Month"
-    type: number
-    sql: ${current_month__copy__1349391106544603151} ;;
-  }
   dimension: usr_calculation_1349391106544181258_qk {
     label: "MIN(0)"
     type: number
@@ -1895,10 +1872,6 @@ view: setupgo_test {
     type: string
     sql: ${calculation_97179246491734018} ;;
   }
-
-
-
-
 
   dimension: usr_difference_in_tr__copy__978688514421264420_qk {
     label: "difference in MVA"
@@ -1940,7 +1913,7 @@ view: setupgo_test {
     type: number
     sql: ${calculation_978688514360860676} ;;
   }
-  dimension: usr__difference_sales__copy__1202461143577034778_qk {
+  measure: usr__difference_sales__copy__1202461143577034778_qk {
     label: "difference in sales"
     type: number
     sql: ${_difference_sales__copy__1202461143577034778} ;;
@@ -2077,16 +2050,6 @@ view: setupgo_test {
     type: sum
     sql: ${net_sales} ;;
   }
-
-  # parameter: date_level_selector {
-  #   type: string
-  #   default_value: "Day"
-  #   allowed_value: { value: "Day" }
-  #   allowed_value: { value: "Week" }
-  #   allowed_value: { value: "Month" }
-  #   allowed_value: { value: "Quater" }
-  #   allowed_value: { value: "Year" }
-  # }
 
 
   parameter: date_level_selector {
@@ -2387,13 +2350,6 @@ dimension: mva_indicator1 {
     # Then [SUAG_NUM (copy)_452048844292403200] END
   }
 
-
-  dimension: _difference_sales__copy__1202461143577034778 {
-    label: "difference in sales"
-    type: number
-    # (SUM([Calculation_978688514360860676])-SUM([Selected Month Sales (copy)_978688514362118151]))
-    sql: CAST(100.0 AS NUMERIC) ;;
-  }
 # **************************************************************************
 # ********************************************************************************
   dimension: calculation_97179246491734018 {
@@ -2602,6 +2558,85 @@ dimension: mva_indicator1 {
     END ;;
     value_format_name: "percent_2"
   }
+
+  parameter: current_month {
+    type: string
+    allowed_value: { label: "January"   value: "1" }
+    allowed_value: { label: "February"  value: "2" }
+    allowed_value: { label: "March"     value: "3" }
+    allowed_value: { label: "April"     value: "4" }
+    allowed_value: { label: "May"       value: "5" }
+    allowed_value: { label: "December"  value: "0" }
+    default_value: "0"  # April
+  }
+
+# *****************************************************************************
+
+  dimension: previous_month {
+    type: number
+    sql: EXTRACT(MONTH FROM DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH)) ;;
+  }
+
+
+  dimension: current_month_number {
+    type: number
+    sql: EXTRACT(MONTH FROM CURRENT_DATE()) ;;
+  }
+
+  # *****************************************************************************
+
+# *********************************************************************************
+
+  measure: selected_month_sales {
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM DATE(${rpt_mth11})) = {% parameter selected_month %}
+       AND EXTRACT(YEAR FROM DATE(${rpt_mth11})) = {% parameter selected_year %}
+      THEN ${suag_den}
+      ELSE 0
+    END ;;
+  }
+
+  measure: previous_month_sales {
+    type: sum
+    sql:
+    CASE
+      WHEN EXTRACT(MONTH FROM DATE(${rpt_mth11})) =
+            CASE WHEN {% parameter selected_month %} = 1 THEN 12 ELSE {% parameter selected_month %} - 1 END
+       AND EXTRACT(YEAR FROM DATE(${rpt_mth11})) =
+            CASE WHEN {% parameter selected_month %} = 1 THEN {% parameter selected_year %} - 1 ELSE {% parameter selected_year %} END
+      THEN ${suag_den}
+      ELSE 0
+    END ;;
+  }
+
+  measure: sales_growth_percentage {
+    type: number
+    value_format_name: percent_2
+    sql:
+    CASE
+      WHEN ${previous_month_sales} != 0 THEN
+        (${selected_month_sales} / ${previous_month_sales}) - 1
+      ELSE NULL
+    END ;;
+  }
+
+  # measure: difference_in_sales {
+  #   label: "Difference in Sales (Test)"
+  #   type: number
+  #   sql: SAFE_DIVIDE(${previous_month_sales} - ${selected_month_sales}, ${selected_month_sales}) ;;
+  #   value_format_name: percent_2
+  # }
+
+  measure:_difference_sales__copy__1202461143577034778 {
+    label: "difference in sales test"
+    type: number
+    sql: SAFE_DIVIDE(SUM(${calculation_978688514360860676}),SUM(${selected_month_sales__copy__978688514362118151} )) ;;
+    # (SUM([Calculation_978688514360860676])-SUM([Selected Month Sales (copy)_978688514362118151]))
+    # sql: CAST(100.0 AS NUMERIC) ;;
+  }
+
 
 
 }
