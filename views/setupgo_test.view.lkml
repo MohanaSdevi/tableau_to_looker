@@ -672,19 +672,19 @@ view: setupgo_test {
 
     type: string
     allowed_value: {
-      label: "Territory"
+      label: "Territories"
       value: "Territory"
     }
     allowed_value: {
-      label: "District"
+      label: "Districts"
       value: "District"
     }
     allowed_value: {
-      label: "Zone"
+      label: "Zones"
       value: "Zone"
     }
     allowed_value: {
-      label: "Outlet"
+      label: "Stores"
       value: "Outlet"
     }
   }
