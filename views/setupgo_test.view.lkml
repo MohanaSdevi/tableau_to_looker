@@ -2637,4 +2637,6 @@ dimension: mva_indicator1 {
     # sql: CAST(100.0 AS NUMERIC) ;;
   }
 
+
+
 }
