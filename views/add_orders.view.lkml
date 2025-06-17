@@ -36,7 +36,7 @@ view: add_orders {
   dimension: order_date {
     label: "Order Date"
     type: date
-    sql: CAST(${TABLE}.Order Date AS TIMESTAMP) ;;
+    sql: CAST(${TABLE}.`Order Date` AS TIMESTAMP) ;;
   }
 
   dimension: order_id {
@@ -61,6 +61,17 @@ view: add_orders {
     label: "Region"
     type: string
     sql: ${TABLE}.Region ;;
+  }
+  dimension: region_custom_rank {
+    type: number
+    sql:
+    CASE
+      WHEN ${region} = 'South' THEN 1
+      WHEN ${region} = 'Central' THEN 2
+      WHEN ${region} = 'East' THEN 3
+      WHEN ${region} = 'West' THEN 4
+      ELSE 999
+    END ;;
   }
 
   dimension: segment {
@@ -90,7 +101,7 @@ view: add_orders {
   dimension: sub_category {
     label: "Sub-Category"
     type: string
-    sql: ${TABLE}.Sub-Category ;;
+    sql: ${TABLE}.Sub_Category ;;
   }
 
   dimension: discount {
@@ -159,7 +170,7 @@ view: add_orders {
     label: "1"
     type: number
     # 1
-    sql: CAST(100.0 AS NUMERIC) ;;
+    sql: CAST(1 AS NUMERIC) ;;
   }
   dimension: calculation_1213720102624411649 {
     label: "'Dummy12'"
@@ -179,6 +190,11 @@ view: add_orders {
   }
   measure: sum_calculation_1878001047320956933_qk {
     label: "1"
+    type: sum
+    sql: ${calculation_1878001047320956933} ;;
+  }
+  measure: sum_calculation_1878001047320956933_1 {
+    label: "sum (1)"
     type: sum
     sql: ${calculation_1878001047320956933} ;;
   }
@@ -214,6 +230,11 @@ view: add_orders {
   }
   measure: sum_profit_qk {
     label: "Profit"
+    type: sum
+    sql: ${profit} ;;
+  }
+  measure: sum_profit_1 {
+    label: "Profit_1"
     type: sum
     sql: ${profit} ;;
   }
