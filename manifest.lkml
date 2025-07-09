@@ -3,7 +3,7 @@ project_name: "tableau_to_looker"
 visualization: {
   label: "ECharts Looker Visualization"
   file: "custom_viz/looker-echarts-lib.umd.js"
-  id: "echarts_visualization"
+  id: "echarts_visualization_prod"
 }
 
 # # Use local_dependency: To enable referencing of another project
